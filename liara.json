@@ -1,0 +1,7 @@
+{
+    "platform": "django",
+    "app": "pvkar",
+    "django": {
+        "settingsFile": "config/settings/production.py"
+    }
+  }

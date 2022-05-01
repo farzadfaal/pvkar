@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}جزئیات پروفایل | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}
+<div class="w-100 d-flex align-items-center justify-content-between">
+  <span>جزئیات پروفایل</span>
+  <a href="{% url 'profiles:profile_update' %}" class="btn btn-primary">
+    <i class="fas fa-edit me-1"></i>
+    <span>بروزرسانی پروفایل</span>
+  </a>
+</div>
+{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'home' %}">صفحه‌ی اصلی</a>
+</li>
+<li class="breadcrumb-item active">جزئیات پروفایل</li>
+{% endblock breadcrumbs %}
+{% block content %}
+<h2 class="card-title">جزئیات پروفایل</h2>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <span class="fw-bold">رسته آیتم‌ها قابل ارائه:</span>
+    <span>{{ profile.get_project_types_display }}</span>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">آیتم‌ها قابل ارائه:</span>
+    <span>{{ profile.get_service_types_display }}</span>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">استان محل سکونت:</span>
+    <span>{{ profile.get_province_display }}</span>
+  </li>
+</ul>
+{% endblock content %}
+
+{% block after_content %}{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

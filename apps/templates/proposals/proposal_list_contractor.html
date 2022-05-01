@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}لیست پیشنهادات | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}لیست پیشنهادات{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'home' %}">صفحه‌ی اصلی</a>
+</li>
+<li class="breadcrumb-item active">لیست پیشنهادات</li>
+{% endblock breadcrumbs %}
+{% block content %}
+{% if proposals %}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <span class="fw-bold">پروژه</span>
+      </div>
+      <div class="col">
+        <span class="fw-bold">نوع آیتم‌ها</span>
+      </div>
+      <div class="col">
+        <span class="fw-bold">دستمزد پیشنهادی</span>
+      </div>
+    </div>
+  </li>
+  {% for proposal in proposals %}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <a class="fw-bold"
+          href="{% url 'projects:project_detail_contractor' proposal.project.id %}">{{ proposal.project.id }}</a>
+      </div>
+      <div class="col">
+        <span class="fw-bold">{{ proposal.project.get_service_type_display }}</span>
+      </div>
+      <div class="col">
+        <span class="fw-bold">{{ proposal.price }}</span>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="alert alert-danger m-0">
+  شما تاکنون پیشنهادی به پروژه‌های ثبت شده در پی‌وی کار نداده‌اید.
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block after_content %}
+<div class="row g-3">
+  <div class="col-12">
+    <div class="alert alert-info d-flex align-items-center m-0">
+      <i class="fas fa-2x fa-info-circle me-3"></i>
+      <p class="m-0">در این قسمت می‌توانید لیست پیشنهادات خود را مشاهده کنید.</p>
+    </div>
+  </div>
+</div>
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

@@ -1,0 +1,127 @@
+{% for service in project.insurancethirdpartyliabilityservice_set.all %}
+  <div class="col-12">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </li>
+      {% comment %} General Info {% endcomment %}
+      <li class="list-group-item">
+        <span class="fw-bold">نوع کاربری ساختمان:</span>
+        <span>{{ service.get_usecase_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">متراژ کل زیربنا:</span>
+        <span>{{ service.infrastructure_area }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">نوع اسکلت‌بندی:</span>
+        <span>{{ service.get_skeleton_type_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">تعداد کل طبقات:</span>
+        <span>{{ service.total_stories }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">تعداد کل طبقات زیرزمین:</span>
+        <span>{{ service.get_total_basements_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">وضعیت فعلی:</span>
+        <span>{{ service.get_current_status_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">مدت زمان درخواست بیمه:</span>
+        <span>{{ service.requested_insurance_duration }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">مساحت زمین مورد ساخت:</span>
+        <span>{{ service.construction_area }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">سیستم سازه:</span>
+        <span>{{ service.get_structural_system_display }}</span>
+      </li>
+      {% comment %} General Info End {% endcomment %}
+      <li class="list-group-item">
+        <span class="fw-bold">عرض قطعه:</span>
+        <span>{{ service.width }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">عمق خاک‌برداری:</span>
+        <span>{{ service.depth }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">نوع خاک:</span>
+        <span>{{ service.get_soil_type_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">روش خاک‌برداری:</span>
+        <span>{{ service.get_excavation_method_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">وجود نشست آب و عمق آب در عمق خاک‌برداری:</span>
+        <span>{% if service.has_water_level %}بله{% else %}خیر{% endif %}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">عمق سطح آب:</span>
+        <span>{{ service.water_level }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">نوع تردد منطقه:</span>
+        <span>{{ service.get_traffic_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">عملیات همزمان با فصل بارندگی:</span>
+        <span>{% if service.raining_season %}بله{% else %}خیر{% endif %}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">در صورت بالا بودن سطح آب عملیات زهکشی انجام می‌شود:</span>
+        <span>{% if service.drainage %}بله{% else %}خیر{% endif %}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">نقشه‌ی سازه نگهبان مورد تایید نظام مهندسی:</span>
+        <span>{% if service.verified_plan %}بله{% else %}خیر{% endif %}</span>
+      </li>
+      <li class="list-group-item">
+      <span class="fw-bold">حصار و توری فلزی در اطراف محل پروژه برای جلوگیری از سقوط
+        اجسام:</span>
+        <span>{% if service.has_fence %}بله{% else %}خیر{% endif %}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">مبلغ تعهدات مالی:</span>
+        <span>{{ service.financial_commitment }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">هزینه‌ی پزشکی هر نفر در هر حادثه:</span>
+        <span>{{ service.medical_expenses_per_person }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">هزینه‌ی پزشکی هر نفر در طول مدت بیمه:</span>
+        <span>{{ service.medical_expenses_per_period }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">شرایط مجاورهای شمالی:</span>
+        <span>{{ service.north_neighbours }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">شرایط مجاورهای شرقی:</span>
+        <span>{{ service.east_neighbours }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">شرایط مجاورهای جنوبی:</span>
+        <span>{{ service.south_neighbours }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">شرایط مجاورهای غربی:</span>
+        <span>{{ service.west_neighbours }}</span>
+      </li>
+      {% if service.extra_info %}
+        <li class="list-group-item">
+          <span class="fw-bold">توضیحات اضافی:</span>
+          <p class="m-0">{{ service.extra_info }}</p>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+{% endfor %}

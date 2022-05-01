@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}جزئیات پلن | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}جزئیات پلن{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'home' %}">صفحه‌ی اصلی</a>
+</li>
+<li class="breadcrumb-item active">جزئیات پلن</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<div class="row g-3">
+  <div class="col-12">
+    <h2 class="card-title">جزئیات پلن</h2>
+  </div>
+  <div class="col-12">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <span class="fw-bold">شناسه پلن:</span>
+        <span>{{ plan.id }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">اعتبار:</span>
+        <span>{{ plan.credit }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">پکیج نامحدود یکساله سایر استان‌ها:</span>
+        {% if service.unlimited %}
+        <span class="text-success">دارد</span>
+        {% else %}
+        <span class="text-danger">ندارد</span>
+        {% endif %}
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">پکیج نامحدود یکساله تهران و سایر استان‌ها:</span>
+        {% if service.unlimited_tehran %}
+        <span class="text-success">دارد</span>
+        {% else %}
+        <span class="text-danger">ندارد</span>
+        {% endif %}
+      </li>
+    </ul>
+  </div>
+  <div class="col-12">
+    <a href="{% url 'payments:plan_create_pay' plan.id %}" class="btn btn-success">
+      <i class="fas fa-check-double me-1"></i>
+      <span>تایید و پرداخت</span>
+    </a>
+    <button type="submit" class="btn btn-link link-danger">
+      <i class="fas fa-edit me-1"></i>
+      <span>ویرایش پلن</span>
+    </button>
+  </div>
+</div>
+{% endblock content %}
+
+{% block after_content %}
+<p class="text-info m-0">
+  پس از ثبت و تایید فرم به صفحه‌ی جزئیات پلن منتقل خواهید شد.
+</p>
+{% endblock after_content %}
+
+{% block modal %}
+{% endblock modal %}
+
+{% block inline_javascript %}{% endblock inline_javascript %}

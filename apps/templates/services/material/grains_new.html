@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - شن و ماسه | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - شن و ماسه{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (خرید شن و ماسه)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "material_grains" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">افزودن</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      این درخواست منتشر شده است و امکان اضافه کردن آیتم‌ها جدید برای آن وجود ندارد. لطفا درخواست
+      جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12 col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <span class="fw-bold">مقدار مورد نیاز:</span>
+                  <span>{{ service.required_amount }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع مصالح:</span>
+                  <span>{{ service.get_material_type_display }}</span>
+                </li>
+                {% if service.material_type == "sand" %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">نوع ماسه:</span>
+                    <span>{{ service.get_sand_type_display }}</span>
+                  </li>
+                {% elif service.material_type == "gravel" %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">نوع شن:</span>
+                    <span>{{ service.get_gravel_type_display }}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <span class="fw-bold">اندازه شن:</span>
+                    <span>{{ service.get_gravel_size_display }}</span>
+                  </li>
+                {% endif %}
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:material_grains_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}
+  <script>
+    const materialtype = document.getElementById("id_material_type")
+    const materialtypeWrapper = document.getElementById("div_id_material_type")
+
+    const sandtype = document.getElementById("div_id_sand_type")
+    sandtype.remove();
+    const graveltype = document.getElementById("div_id_gravel_type")
+    graveltype.remove();
+    const gravelsize = document.getElementById("div_id_gravel_size")
+    gravelsize.remove();
+
+    materialtype.addEventListener("change", () => {
+      if (materialtype.value == "sand") {
+        materialtypeWrapper.parentNode.insertBefore(sandtype, materialtypeWrapper
+          .nextSibling);
+        graveltype.remove();
+        gravelsize.remove();
+      } else if (materialtype.value == "gravel") {
+        materialtypeWrapper.parentNode.insertBefore(graveltype, materialtypeWrapper
+          .nextSibling);
+        materialtypeWrapper.parentNode.insertBefore(gravelsize, materialtypeWrapper
+          .nextSibling);
+        sandtype.remove();
+      } else {
+        sandtype.remove();
+        graveltype.remove();
+        gravelsize.remove();
+      }
+    })
+
+  </script>
+{% endblock inline_javascript %}

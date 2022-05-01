@@ -1,0 +1,58 @@
+{% load static %}
+<header id="topnav" class="defaultscroll sticky">
+  <div class="container">
+    <a class="logo" href="{% url 'home' %}">
+      <span class="logo-light-mode">
+        <img src="{% static 'website/img/logo.svg' %}" class="l-dark" height="40" alt="">
+        <img src="{% static 'website/img/logo.svg' %}" class="l-light" height="40" alt="">
+      </span>
+      <img src="{% static 'website/img/logo.svg' %}" height="40" class="logo-dark-mode" alt="">
+    </a>
+
+    <div class="menu-extras">
+      <div class="menu-item">
+        <!-- Mobile menu toggle-->
+        <a class="navbar-toggle" id="isToggle" onclick="toggleMenu()">
+          <div class="lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </a>
+        <!-- End mobile menu toggle-->
+      </div>
+    </div>
+
+    <!--Login button Start-->
+    <ul class="buy-button list-inline mb-0">
+      <li class="list-inline-item mb-0">
+        <a href="javascript:void(0)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+           aria-controls="offcanvasRight">
+          <div class="btn btn-icon btn-pills btn-soft-primary">
+            <i data-feather="plus" class="fea icon-sm"></i>
+          </div>
+        </a>
+      </li>
+
+      <li class="list-inline-item ps-1 mb-0">
+        <a href="javascript:void(0)" target="_blank">
+          <div class="btn btn-icon btn-pills btn-primary">
+            <i data-feather="user" class="fea icon-sm"></i>
+          </div>
+        </a>
+      </li>
+    </ul>
+    <!--Login button End-->
+
+    <div id="navigation">
+      <!-- Navigation Menu-->
+      <ul class="navigation-menu nav-light">
+        <li><a href="" class="sub-menu-item">صفحه اصلی</a></li>
+        <li><a href="" class="sub-menu-item">درباره ما</a></li>
+        <li><a href="" class="sub-menu-item">تماس با ما</a></li>
+        <li><a href="" class="sub-menu-item">تعرفه خدمات</a></li>
+        <li><a href="" class="sub-menu-item">لیست پروژه‌ها</a></li>
+      </ul><!--end navigation menu-->
+    </div><!--end navigation-->
+  </div><!--end container-->
+</header>

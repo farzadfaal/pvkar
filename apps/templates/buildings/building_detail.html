@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}جزئیات ساختمان {{ building.title }}{% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}
+<div class="w-100 d-flex align-items-center justify-content-between">
+  <span>جزئیات ساختمان {{ building.title }}</span>
+  <a href="{% url "buildings:projects:project_new" building.id %}"
+    class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i>
+    <span>ثبت درخواست جدید</span>
+  </a>
+</div>
+{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'buildings:building_list' %}">لیست ساختمان‌ها</a>
+</li>
+<li class="breadcrumb-item active">{{ building.title }}</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <span>عنوان ساختمان:</span>
+    <span>{{ building.title }}</span>
+  </li>
+  <li class="list-group-item">
+    <span>استان:</span>
+    <span>{{ building.get_province_display }}</span>
+  </li>
+  <li class="list-group-item">
+    <span>شهر:</span>
+    <span>{{ building.city }}</span>
+  </li>
+  <li class="list-group-item">
+    <span>محله:</span>
+    <span>{{ building.district }}</span>
+  </li>
+</ul>
+{% endblock content %}
+
+{% block after_content %}
+<h2 class="card-title">درخواست‌های ثبت شده برای این ساختمان</h2>
+<div class="row">
+  {% if building.project_set.all %}
+  <div class="col-12">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="row fw-bold">
+          <div class="col">شناسه</div>
+          <div class="col">وضعیت انتشار</div>
+          <div class="col">رسته</div>
+          <div class="col">نوع آیتم‌ها</div>
+        </div>
+      </li>
+      {% for project in building.project_set.all %}
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col">
+            <a
+              href="{% url 'buildings:projects:project_detail' building.id project.id %}">{{ project.id }}</a>
+          </div>
+          <div class="col">{{ project.get_status_display }}</div>
+          <div class="col">{{ project.get_category_display }}</div>
+          <div class="col">{{ project.get_service_type_display }}</div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% else %}
+  <div class="col-12 d-flex align-items-center text-info">
+    <i class="fas fa-info-circle me-1"></i>
+    <p class="m-0">
+      <span class="me-1">تاکنون در خواستی برای این ساختمان ثبت نشده است.</span>
+      <a href="{% url 'buildings:projects:project_new' building.id %}"
+        class="btn btn-sm btn-primary">ثبت درخواست</a>
+    </p>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock after_content %}
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

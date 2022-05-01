@@ -1,0 +1,100 @@
+{% for service in project.materialclayservice_set.all %}
+  <div class="col-12 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">تعداد مورد نیاز:</span>
+            <span>{{ service.required_quantity }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">نوع بلوک:</span>
+            <span>{{ service.get_type_display }}</span>
+          </li>
+          {% if service.type == "simple" %}
+            <li class="list-group-item">
+              <span class="fw-bold">ابعاد مورد نیاز:</span>
+              <span>{{ service.get_simple_dimensions_display }}</span>
+            </li>
+            {% if service.simple_dimensions == "normal" %}
+              <li class="list-group-item">
+                <span class="fw-bold">طول:</span>
+                <span>{{ service.get_simple_length_display }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ارتفاع:</span>
+                <span>{{ service.get_simple_height_display }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ضخامت:</span>
+                <span>{{ service.get_simple_thickness_display }}</span>
+              </li>
+            {% endif %}
+            {% if service.simple_dimensions == "custom" %}
+              <li class="list-group-item">
+                <span class="fw-bold">طول:</span>
+                <span>{{ service.simple_custom_length }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ارتفاع:</span>
+                <span>{{ service.simple_custom_height }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ضخامت:</span>
+                <span>{{ service.simple_custom_thickness }}</span>
+              </li>
+            {% endif %}
+          {% endif %}
+          {% if service.type == "foam" %}
+            <li class="list-group-item">
+              <span class="fw-bold">ابعاد مورد نیاز:</span>
+              <span>{{ service.get_foam_dimensions_display }}</span>
+            </li>
+            {% if service.foam_dimensions == "normal" %}
+              <li class="list-group-item">
+                <span class="fw-bold">طول:</span>
+                <span>{{ service.get_foam_length_display }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ارتفاع:</span>
+                <span>{{ service.get_foam_height_display }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ضخامت:</span>
+                <span>{{ service.get_foam_thickness_display }}</span>
+              </li>
+            {% endif %}
+            {% if service.foam_dimensions == "custom" %}
+              <li class="list-group-item">
+                <span class="fw-bold">طول:</span>
+                <span>{{ service.foam_custom_length }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ارتفاع:</span>
+                <span>{{ service.foam_custom_height }}</span>
+              </li>
+              <li class="list-group-item">
+                <span class="fw-bold">ضخامت:</span>
+                <span>{{ service.foam_custom_thickness }}</span>
+              </li>
+            {% endif %}
+          {% endif %}
+          <li class="list-group-item">
+            <span class="fw-bold">هزینه‌ی حمل:</span>
+            <span>{% if service.transport %}بله{% else %}خیر{% endif %}</span>
+          </li>
+          {% if service.extra_info %}
+            <li class="list-group-item">
+              <span class="fw-bold">توضیحات اضافی:</span>
+              <p class="m-0">{{ service.extra_info }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endfor %}

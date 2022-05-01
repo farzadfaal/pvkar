@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت پیشنهاد | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت پیشنهاد{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active">ثبت پیشنهاد</li>
+{% endblock breadcrumbs %}
+{% block content %}
+<div class="alert alert-info" style="font-size: 0.875rem">
+  <h3>توضیحات عمومی</h3>
+  <ul class="list-group list-group-flush list-group-numbered">
+    <li>به منظور یکسان سازی شرایط، قیمتها با فرض پرداخت نقدی محاسبه شوند. درج شرایط خاص
+      پرداخت در قسمت توضیحات اضافه قابل ذکر است.</li>
+    <li>قیمتها با توجه به شرایط روز محاسبه و اعلام شوند.</li>
+    <li>به منظور ایجاد مقایسه قیمتها در اکثر کارها ، هزینه به صورت قیمت نهایی کل با توجه
+      به حجم کار محاسبه شوند. قیمتهای تفکیکی را میتوانید در قسمت توضیحات اضافه درج
+      نمایید.</li>
+    <li>هرگونه خدمات اضافی و یا شرایط خاص، جدا از توضیحات پیشفرض هر درخواست، در قسمت
+      توضیحات اضافه درج گردد. </li>
+  </ul>
+</div>
+<div class="alert alert-secondary" style="font-size:0.875rem">
+  <h3>توضیحات پیشفرض این درخواست</h3>
+  <ul class="list-group list-group-flush list-group-numbered">
+    {% comment %} Material:: Start {% endcomment %}
+    {% if project.category == "material" %}
+    {% comment %} material category:: start {% endcomment %}
+    {% if project.service_type == "material_aac" %}
+    {% include "proposals/help/material/_aac.html" %}
+    {% elif project.service_type == "material_beam" %}
+    {% include "proposals/help/material/_beam.html" %}
+    {% elif project.service_type == "material_clay" %}
+    {% include "proposals/help/material/_clay.html" %}
+    {% elif project.service_type == "material_concrete" %}
+    {% include "proposals/help/material/_concrete.html" %}
+    {% elif project.service_type == "material_concrete_block" %}
+    {% include "proposals/help/material/_concrete_block.html" %}
+    {% elif project.service_type == "material_frame" %}
+    {% include "proposals/help/material/_frame.html" %}
+    {% elif project.service_type == "material_grains" %}
+    {% include "proposals/help/material/_grains.html" %}
+    {% elif project.service_type == "material_polystyrene" %}
+    {% include "proposals/help/material/_polystyrene.html" %}
+    {% endif %}
+    {% comment %} material category:: end {% endcomment %}
+    {% endif %}
+    {% comment %} Material:: End {% endcomment %}
+
+    {% comment %} Engineering:: Start {% endcomment %}
+    {% if project.category == "engineering" %}
+    {% include "proposal/help/engineering/_engineering.html" %}
+    {% endif %}
+    {% comment %} Engineering:: End {% endcomment %}
+
+    {% comment %} Insurance:: Start {% endcomment %}
+    {% if project.category == "insurance" %}
+    {% comment %} insurance categories:: start {% endcomment %}
+    {% if project.service_type == "insurance_employee" %}
+    {% include "proposals/help/insurance/_employee.html" %}
+    {% elif project.service_type == "insurance_quality" %}
+    {% include "proposals/help/insurance/_quality.html" %}
+    {% elif project.service_type == "insurance_third_party" %}
+    {% include "proposals/help/insurance/_third_party.html" %}
+    {% endif %}
+    {% comment %} insurance categories:: end {% endcomment %}
+    {% endif %}
+    {% comment %} Insurance:: End {% endcomment %}
+
+    {% comment %} Contracting:: Start {% endcomment %}
+    {% if project.category == "contracting" %}
+    {% comment %} contracting categories:: start {% endcomment %}
+    {% if project.service_type == "contracting_concrete" %}
+    {% include "proposals/help/contracting/_concrete.html" %}
+    {% elif project.service_type == "contracting_excavation" %}
+    {% include "proposals/help/contracting/_excavation.html" %}
+    {% elif project.service_type == "contracting_facing" %}
+    {% include "proposals/help/contracting/_facing.html" %}
+    {% elif project.service_type == "contracting_gas" %}
+    {% include "proposals/help/contracting/_gas.html" %}
+    {% elif project.service_type == "contracting_nailing" %}
+    {% include "proposals/help/contracting/_nailing.html" %}
+    {% elif project.service_type == "contracting_painting" %}
+    {% include "proposals/help/contracting/_painting.html" %}
+    {% elif project.service_type == "contracting_piling" %}
+    {% include "proposals/help/contracting/_piling.html" %}
+    {% elif project.service_type == "contracting_plastering" %}
+    {% include "proposals/help/contracting/_plastering.html" %}
+    {% elif project.service_type == "contracting_plumbing" %}
+    {% include "proposals/help/contracting/_plumbing.html" %}
+    {% elif project.service_type == "contracting_scaffolding" %}
+    {% include "proposals/help/contracting/_scaffolding.html" %}
+    {% elif project.service_type == "contracting_steel" %}
+    {% include "proposals/help/contracting/_steel.html" %}
+    {% elif project.service_type == "contracting_truss" %}
+    {% include "proposals/help/contracting/_truss.html" %}
+    {% elif project.service_type == "contracting_wall" %}
+    {% include "proposals/help/contracting/_wall.html" %}
+    {% elif project.service_type == "contracting_waterproofing" %}
+    {% include "proposals/help/contracting/_waterproofing.html" %}
+    {% elif project.service_type == "contracting_wiring" %}
+    {% include "proposals/help/contracting/_wiring.html" %}
+    {% endif %}
+    {% comment %} contracting categories:: end {% endcomment %}
+    {% endif %}
+    {% comment %} Contracting:: End {% endcomment %}
+  </ul>
+</div>
+<form method="POST">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button class="btn btn-primary">ثبت پیشنهاد</button>
+</form>
+{% endblock content %}
+
+{% block after_content %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

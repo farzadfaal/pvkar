@@ -1,0 +1,51 @@
+{% extends "accounts/base.html" %}
+
+{% block title_block %}تایید کاربر{% endblock title_block %}
+
+{% block body_block %}
+
+<div class="card card-body">
+  {% if title %}
+  <div class="alert alert-info m-0">
+    <p class="m-0">{{ title }}</p>
+  </div>
+  {% endif %}
+
+  <div class="dpa-table-title">
+    <h3>شماره تلفن‌ها</h3>
+    <a class="btn btn-sm btn-primary" href="{% url 'accounts:add_phone' %}">
+      <i class="fas fa-check"></i>
+      <span>شماره تلفن جدید</span>
+    </a>
+  </div>
+  <div class="dpa-table">
+    <div class="dpa-row header">
+      <div class="dpa-cell">
+        Phone Number
+      </div>
+      <div class="dpa-cell">
+        Status
+      </div>
+    </div>
+    {% for obj in numbers %}
+    <div class="dpa-row">
+      <div class="dpa-cell">
+        {{ obj.phone }}
+      </div>
+      <div class="dpa-cell">
+        {% if obj.is_verified %}
+        <p>Verified</p>
+        {% else %}
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="method" value="phone">
+          <input type="hidden" name="pk" value="{{ obj.pk }}">
+          <input class="dpa-cell-btn" type="submit" value="Verify">
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock body_block %}

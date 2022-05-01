@@ -1,0 +1,7 @@
+{% if request.user.role == "employer" %}
+{% include "includes/sidebar/employer.html" %}
+{% endif %}
+
+{% if request.user.role == "contractor" %}
+{% include "includes/sidebar/contractor.html" %}
+{% endif %}

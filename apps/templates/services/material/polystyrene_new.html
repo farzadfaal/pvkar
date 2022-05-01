@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - یونولیت AAC | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - یونولیت AAC{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (خرید یونولیت AAC)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "material_polystyrene" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">افزودن</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      این درخواست منتشر شده است و امکان اضافه کردن آیتم‌ها جدید برای آن وجود ندارد. لطفا درخواست
+      جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12 col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع:</span>
+                  <span>{{ service.get_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">ابعاد مورد نیاز:</span>
+                  <span>{{ service.get_required_dimensions_display }}</span>
+                </li>
+                {% if service.required_dimensions == "normal" %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">طول:</span>
+                    <span>{{ service.get_length_display }}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <span class="fw-bold">ارتفاع:</span>
+                    <span>{{ service.get_height_display }}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <span class="fw-bold">ضخامت:</span>
+                    <span>{{ service.get_thickness_display }}</span>
+                  </li>
+                {% else %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">طول:</span>
+                    <span>{{ service.custom_length }}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <span class="fw-bold">ارتفاع:</span>
+                    <span>{{ service.custom_height }}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <span class="fw-bold">ضخامت:</span>
+                    <span>{{ service.custom_thickness }}</span>
+                  </li>
+                {% endif %}
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:material_polystyrene_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" and project.building.employer == request.user %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}
+  <script>
+    const dimensionsWrapper = document.getElementById("div_id_required_dimensions")
+    const dimensions = document.getElementById("id_required_dimensions")
+    const thickness = document.getElementById("div_id_thickness")
+    const height = document.getElementById("div_id_height")
+    const length = document.getElementById("div_id_length")
+    const custom_thickness = document.getElementById("div_id_custom_thickness")
+    const custom_height = document.getElementById("div_id_custom_height")
+    const custom_length = document.getElementById("div_id_custom_length")
+    thickness.remove();
+    height.remove();
+    length.remove();
+    custom_thickness.remove()
+    custom_height.remove()
+    custom_length.remove()
+    dimensions.addEventListener("change", () => {
+      if (dimensions.value != "normal") {
+        thickness.remove();
+        height.remove();
+        length.remove();
+        dimensionsWrapper.parentNode.insertBefore(custom_thickness, dimensionsWrapper
+          .nextSibling);
+        dimensionsWrapper.parentNode.insertBefore(custom_height, dimensionsWrapper
+          .nextSibling);
+        dimensionsWrapper.parentNode.insertBefore(custom_length, dimensionsWrapper
+          .nextSibling);
+      } else {
+        dimensionsWrapper.parentNode.insertBefore(thickness, dimensionsWrapper
+          .nextSibling);
+        dimensionsWrapper.parentNode.insertBefore(height, dimensionsWrapper
+          .nextSibling);
+        dimensionsWrapper.parentNode.insertBefore(length, dimensionsWrapper
+          .nextSibling);
+        custom_thickness.remove();
+        custom_height.remove();
+        custom_length.remove();
+      }
+    })
+
+  </script>
+{% endblock inline_javascript %}

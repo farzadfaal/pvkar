@@ -1,0 +1,27 @@
+{% extends "accounts/base.html" %}
+
+{% block title_block %}
+Logout
+{% endblock title_block %}
+
+{% block body_block %}
+<div class="card card-body">
+  <div class="row g-3">
+    <h3 class="card-title col-12">خروج</h3>
+    <div class="alert alert-danger m-0 col-12">مطمُنید می‌خواهید از حساب کاربری‌تان خارج
+      شوید؟
+    </div>
+    <form class="form col-12" method="POST">
+      {% csrf_token %}
+      <a class="btn btn-primary" href="{% url 'home' %}">
+        <i class="fas fa-close me-1"></i>
+        <span>بیخیال</span>
+      </a>
+      <button class="btn btn-danger" type="submit">
+        <i class="fas fa-sign-out me-1"></i>
+        <span>خروج</span>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock body_block %}

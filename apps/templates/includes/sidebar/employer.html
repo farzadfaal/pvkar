@@ -1,0 +1,16 @@
+{% if user.subscription %}
+<div class="bg-info text-light p-3 rounded">
+  <h2 class="text-light fs-5">اعتبار عادی:</h2>
+  {% if user.subscription.credit == 0 or user.subscription.credit == None %}
+  <div class="bg-white bg-opacity-10 p-3 rounded m-0">اعتبار عادی شما به پایان رسیده
+    است. لطفا نسبت
+    به
+    شارژ حساب خود اقدام فرمایید.</div>
+  {% else %}
+  <p class="m-0">{{ user.subscription.credit }} تومان</p>
+  {% endif %}
+</div>
+{% else %}
+<div class="bg-white bg-opacity-10 p-3 rounded m-0">عضویت شما توسط سیستم لغو شده است.
+  اگر فکر می‌کنید که اشتباهی رخ داده است با پشتیبانی تماس بگیرید.</div>
+{% endif %}

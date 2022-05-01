@@ -1,0 +1,42 @@
+{% for service in project.engineeringservice_set.all %}
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header"><span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span></div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">زمینه‌ی مهندسی:</span>
+            <span>{{ service.get_engineering_type_display }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تعداد کل طبقات:</span>
+            <span>{{ service.total_stories }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">نوع سازه:</span>
+            <span>{{ service.get_building_type_display }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">مساحت زمین قابل ساخت:</span>
+            <span>{{ service.constructable_area }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">متراژ کل زیربنا:</span>
+            <span>{{ service.infrastructure_area }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تعداد طبقات زیرزمین:</span>
+            <span>{{ service.get_total_basements_display }}</span>
+          </li>
+          {% if service.extra_info %}
+            <li class="list-group-item">
+              <span class="fw-bold">توضیحات اضافی:</span>
+              <p class="m-0">{{ service.extra_info }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endfor %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl" class="h-100">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title_block  %}Base Title{% endblock title_block  %}</title>
+
+  <link rel="stylesheet" href="{% static 'css/project.min.css' %}">
+</head>
+
+<body class="h-100 py-5">
+  <div class="container h-100">
+    <div class="d-flex align-items-center justify-content-center h-100 row">
+      <main class="col-12 col-md-8 col-lg-6 col-xl-4 col-xxl-3">
+        {% block body_block %}{% endblock body_block %}
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>

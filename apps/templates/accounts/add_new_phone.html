@@ -1,0 +1,24 @@
+{% extends "accounts/base.html" %}
+{% load crispy_forms_filters static %}
+
+{% block title_block %}افزودن شماره تلفن{% endblock title_block %}
+
+{% block body_block %}
+<!--suppress HtmlUnknownAttribute -->
+<div class="card card-body">
+  <h3 class="card-title text-center">افزودن شماره تلفن</h3>
+  <form class="form" method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {{ form|crispy }}
+
+    <div class="d-grid">
+      <button class="btn btn-sm btn-primary" type="submit">
+        <i class="fas fa-check me-1"></i>
+        <span>ثبت شماره تلفن</span>
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock body_block %}

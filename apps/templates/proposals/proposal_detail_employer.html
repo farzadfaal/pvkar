@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}جزئیات پیشنهادات | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}جزئیات پیشنهادات{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'home' %}">صفحه‌ی اصلی</a>
+</li>
+<li class="breadcrumb-item active">جزئیات پیشنهادات</li>
+{% endblock breadcrumbs %}
+{% block content %}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <span class="fw-bold">پیمانکار:</span>
+    <span>{{ proposal.proposer }}</span>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">دستمزد پیشنهادی:</span>
+    <span class="fw-bold">{{ proposal.price }}</span>
+  </li>
+  <li class="list-group-item d-flex flex-column">
+    <span class="fw-bold">تلفن‌های تماس:</span>
+    <ul class="list-group list-group-numbered">
+      {% for phone_number in proposal.proposer.phonenumber_set.all %}
+      <li class="list-group-item">
+        <a dir="ltr" href="tel:{{ phone_number }}">{{ phone_number }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </li>
+</ul>
+{% endblock content %}
+
+{% block after_content %}
+<h3 class="card-title">جزئیات پیشنهاد</h3>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <span class="fw-bold">توضیحات عمومی:</span>
+    <p class="m-0">{{ proposal.description }}</p>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">توضیحات تخصصی:</span>
+    <p class="m-0">{{ proposal.special_description }}</p>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">شرایط پرداخت:</span>
+    <p class="m-0">{{ proposal.financial_description }}</p>
+  </li>
+</ul>
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

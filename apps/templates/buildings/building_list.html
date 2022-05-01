@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}لیست ساختمان‌ها | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}
+<div class="w-100 d-flex align-items-center justify-content-between">
+  <span>لیست ساختمان‌ها</span>
+  <a href="{% url 'buildings:building_new' %}" class="btn btn-primary">
+    <i class="fas fa-plus me-1"></i>
+    <span>افزودن ساختمان جدید</span>
+  </a>
+</div>
+{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item active">لیست ساختمان‌ها</li>
+{% endblock breadcrumbs %}
+{% block content %}
+{% if buildings %}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <span class="fw-bold">عنوان</span>
+      </div>
+      <div class="col">
+        <span class="fw-bold">استان</span>
+      </div>
+      <div class="col">
+        <span class="fw-bold">شهر</span>
+      </div>
+    </div>
+  </li>
+  {% for building in buildings %}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col">
+        <a
+          href="{% url 'buildings:building_detail' building.id %}">{{ building.title }}</a>
+      </div>
+      <div class="col">{{ building.get_province_display }}</div>
+      <div class="col">{{ building.city }}</div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="alert alert-info m-0">
+  شما تاکنون ساختمانی ثبت نکرده‌اید. برای ثبت ساختمان می‌توانید از فرم زیر استفاده کنید.
+</div>
+{% endif %}
+{% endblock content %}
+
+{% block after_content %}
+<h2 class="card-title">ثبت ساختمان جدید</h2>
+<form action="{% url 'buildings:building_new' %}" method="post">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button class="btn btn-primary" type="submit">
+    <i class="fas fa-check me-1"></i>
+    <span>ثبت ساختمان</span>
+  </button>
+</form>
+{% endblock after_content %}
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

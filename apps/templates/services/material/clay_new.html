@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - بلوک سفالی دیوار | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - بلوک سفالی دیوار{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (خرید بلوک سفالی دیوار)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "material_clay" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">افزودن</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      این درخواست منتشر شده است و امکان اضافه کردن آیتم‌ها جدید برای آن وجود ندارد. لطفا درخواست
+      جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12 col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد مورد نیاز:</span>
+                  <span>{{ service.required_quantity }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع بلوک:</span>
+                  <span>{{ service.get_type_display }}</span>
+                </li>
+                {% if service.type == "simple" %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">ابعاد مورد نیاز:</span>
+                    <span>{{ service.get_simple_dimensions_display }}</span>
+                  </li>
+                  {% if service.simple_dimensions == "normal" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.get_simple_length_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.get_simple_height_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.get_simple_thickness_display }}</span>
+                    </li>
+                  {% endif %}
+                  {% if service.simple_dimensions == "custom" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.simple_custom_length }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.simple_custom_height }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.simple_custom_thickness }}</span>
+                    </li>
+                  {% endif %}
+                {% endif %}
+                {% if service.type == "foam" %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">ابعاد مورد نیاز:</span>
+                    <span>{{ service.get_foam_dimensions_display }}</span>
+                  </li>
+                  {% if service.foam_dimensions == "normal" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.get_foam_length_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.get_foam_height_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.get_foam_thickness_display }}</span>
+                    </li>
+                  {% endif %}
+                  {% if service.foam_dimensions == "custom" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.foam_custom_length }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.foam_custom_height }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.foam_custom_thickness }}</span>
+                    </li>
+                  {% endif %}
+                {% endif %}
+                <li class="list-group-item">
+                  <span class="fw-bold">هزینه‌ی حمل:</span>
+                  <span>{% if service.transport %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:material_clay_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}
+  <script>
+    const simpledimensions = document.getElementById("id_simple_dimensions")
+    const simpledimensionsWrapper = document.getElementById("div_id_simple_dimensions")
+    simpledimensionsWrapper.remove();
+    const simplethickness = document.getElementById("div_id_simple_thickness")
+    simplethickness.remove();
+    const simpleheight = document.getElementById("div_id_simple_height")
+    simpleheight.remove();
+    const simplelength = document.getElementById("div_id_simple_length")
+    simplelength.remove();
+    const simplecustomthickness = document.getElementById(
+      "div_id_simple_custom_thickness")
+    simplecustomthickness.remove();
+    const simplecustomheight = document.getElementById(
+      "div_id_simple_custom_height")
+    simplecustomheight.remove();
+    const simplecustomlength = document.getElementById(
+      "div_id_simple_custom_length")
+    simplecustomlength.remove();
+    const foamdimensions = document.getElementById("id_foam_dimensions")
+    const foamdimensionsWrapper = document.getElementById("div_id_foam_dimensions")
+    foamdimensionsWrapper.remove();
+    const foamthickness = document.getElementById("div_id_foam_thickness")
+    foamthickness.remove();
+    const foamheight = document.getElementById("div_id_foam_height")
+    foamheight.remove();
+    const foamlength = document.getElementById("div_id_foam_length")
+    foamlength.remove();
+    const foamcustomthickness = document.getElementById(
+      "div_id_foam_custom_thickness")
+    foamcustomthickness.remove();
+    const foamcustomheight = document.getElementById(
+      "div_id_foam_custom_height")
+    foamcustomheight.remove();
+    const foamcustomlength = document.getElementById(
+      "div_id_foam_custom_length")
+    foamcustomlength.remove();
+
+    const type = document.getElementById("id_type")
+    const typeWrapper = document.getElementById("div_id_type")
+    type.addEventListener("change", () => {
+      if (type.value == "simple") {
+        typeWrapper.parentNode.insertBefore(simpledimensionsWrapper, typeWrapper
+          .nextSibling);
+        foamdimensionsWrapper.remove()
+        foamthickness.remove();
+        foamheight.remove();
+        foamlength.remove();
+        foamcustomthickness.remove();
+        foamcustomheight.remove();
+        foamcustomlength.remove();
+      }
+      if (type.value == "foam") {
+        typeWrapper.parentNode.insertBefore(foamdimensionsWrapper, typeWrapper
+          .nextSibling);
+        simpledimensionsWrapper.remove()
+        simpledimensionsWrapper.remove()
+        simplethickness.remove();
+        simpleheight.remove();
+        simplelength.remove();
+        simplecustomthickness.remove();
+        simplecustomheight.remove();
+        simplecustomlength.remove();
+      }
+    })
+    simpledimensions.addEventListener("change", () => {
+      if (simpledimensions.value == "normal") {
+        simpledimensionsWrapper.parentNode.insertBefore(simplethickness,
+          simpledimensionsWrapper
+            .nextSibling);
+        simpledimensionsWrapper.parentNode.insertBefore(simpleheight,
+          simpledimensionsWrapper
+            .nextSibling);
+        simpledimensionsWrapper.parentNode.insertBefore(simplelength,
+          simpledimensionsWrapper
+            .nextSibling);
+        simplecustomthickness.remove();
+        simplecustomheight.remove();
+        simplecustomlength.remove();
+      }
+      if (simpledimensions.value == "custom") {
+        simpledimensionsWrapper.parentNode.insertBefore(simplecustomthickness,
+          simpledimensionsWrapper
+            .nextSibling);
+        simpledimensionsWrapper.parentNode.insertBefore(simplecustomheight,
+          simpledimensionsWrapper
+            .nextSibling);
+        simpledimensionsWrapper.parentNode.insertBefore(simplecustomlength,
+          simpledimensionsWrapper
+            .nextSibling);
+        simplethickness.remove();
+        simpleheight.remove();
+        simplelength.remove();
+      }
+    })
+    foamdimensions.addEventListener("change", () => {
+      if (foamdimensions.value == "normal") {
+        foamdimensionsWrapper.parentNode.insertBefore(foamthickness,
+          foamdimensionsWrapper
+            .nextSibling);
+        foamdimensionsWrapper.parentNode.insertBefore(foamheight,
+          foamdimensionsWrapper
+            .nextSibling);
+        foamdimensionsWrapper.parentNode.insertBefore(foamlength,
+          foamdimensionsWrapper
+            .nextSibling);
+        foamcustomthickness.remove();
+        foamcustomheight.remove();
+        foamcustomlength.remove();
+      }
+      if (foamdimensions.value == "custom") {
+        foamdimensionsWrapper.parentNode.insertBefore(foamcustomthickness,
+          foamdimensionsWrapper
+            .nextSibling);
+        foamdimensionsWrapper.parentNode.insertBefore(foamcustomheight,
+          foamdimensionsWrapper
+            .nextSibling);
+        foamdimensionsWrapper.parentNode.insertBefore(foamcustomlength,
+          foamdimensionsWrapper
+            .nextSibling);
+        foamthickness.remove();
+        foamheight.remove();
+        foamlength.remove();
+      }
+    })
+
+  </script>
+{% endblock inline_javascript %}

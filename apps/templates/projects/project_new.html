@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}ثبت درخواست | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت درخواست{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'buildings:projects:project_list' building.id %}">لیست درخواست‌ها</a>
+</li>
+<li class="breadcrumb-item">ثبت درخواست</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button class="btn btn-primary">
+    <i class="fas fa-check me-1"></i>
+    <span>ثبت درخواست</span>
+  </button>
+</form>
+{% endblock content %}
+
+{% block after_content %}
+<div class="alert alert-info">
+  <i class="fas fa-2x fa-info-circle me-3"></i>
+  لطفا برای ثبت درخواست، نوع آیتم‌ها درخواستی خود را انتخاب کنید. در نظر داشته باشید که پس
+  از انتخاب نوع درخواست، امکان ویرایش آن وجود ندارد!
+</div>
+{% endblock after_content %}
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

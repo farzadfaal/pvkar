@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}پی‌وی کار{% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}بازبینی اطلاعات ساختمان{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'buildings:building_new' %}">ثبت ساختمان جدید</a>
+</li>
+<li class="breadcrumb-item active">بازبینی اطلاعات ساختمان</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <span>عنوان ساختمان:</span>
+    <span>{{ building.title }}</span>
+  </li>
+  <li class="list-group-item">
+    <span>استان:</span>
+    <span>{{ building.get_province_display }}</span>
+  </li>
+  <li class="list-group-item">
+    <span>شهر:</span>
+    <span>{{ building.city }}</span>
+  </li>
+  <li class="list-group-item">
+    <span>محله:</span>
+    <span>{{ building.district }}</span>
+  </li>
+</ul>
+<form method="post" action="{% url 'buildings:building_publish' building.id %}">
+  <p class="text-center">آیا از صحت اطلاعات وارد شده اطمینان دارید؟</p>
+  {% csrf_token %}
+  <div class="d-flex justify-content-center">
+    <button type="submit" class="btn btn-primary mx-1">بله، مطمئن هستم</button>
+    <a href="{% url 'buildings:building_update' building.id %}"
+      class="btn btn-warning mx-1">مایل به ویرایش هستم</a>
+  </div>
+</form>
+{% endblock content %}
+
+{% block after_content %}{% endblock after_content %}
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

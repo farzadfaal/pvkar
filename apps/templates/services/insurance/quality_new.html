@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - بیمه‌ی مسئولیت کارکنان | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - بیمه‌ی مسئولیت کارکنان{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (بیمه‌ی مسئولیت کارکنان)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "insurance_quality" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      {% if not project.insurancequalityservice_set.all %}
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-check me-1"></i>
+            <span>ثبت آیتم</span>
+          </button>
+        </form>
+      {% else %}
+        <div class="alert alert-danger">
+          امکان اضافه کردن سرویس جدید برای درخواست ثبت شده در رسته‌ی
+          {{ project.get_service_type_display }} وجود ندارد.
+          لطفا درخواست جدید ثبت کنید.
+        </div>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      این درخواست منتشر شده است و امکان اضافه کردن آیتم‌ها جدید برای آن وجود ندارد. لطفا
+      درخواست
+      جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>جزئیات آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                {% comment %} General Info {% endcomment %}
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع کاربری ساختمان:</span>
+                  <span>{{ service.get_usecase_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">متراژ کل زیربنا:</span>
+                  <span>{{ service.infrastructure_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع اسکلت‌بندی:</span>
+                  <span>{{ service.get_skeleton_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل طبقات:</span>
+                  <span>{{ service.total_stories }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل طبقات زیرزمین:</span>
+                  <span>{{ service.get_total_basements_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">وضعیت فعلی:</span>
+                  <span>{{ service.get_current_status_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مدت زمان درخواست بیمه:</span>
+                  <span>{{ service.requested_insurance_duration }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مساحت زمین مورد ساخت:</span>
+                  <span>{{ service.construction_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">سیستم سازه:</span>
+                  <span>{{ service.get_structural_system_display }}</span>
+                </li>
+                {% comment %} General Info End {% endcomment %}
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل واحدها:</span>
+                  <span>{{ service.total_suites }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">جنس خاک:</span>
+                  <span>{{ service.get_soil_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع فونداسیون:</span>
+                  <span>{{ service.get_foundation_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">عمق گودبرداری:</span>
+                  <span>{{ service.excavation_depth }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع سازه:</span>
+                  <span>{{ service.get_building_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">ارتفاع هر سقف:</span>
+                  <span>{{ service.ceiling_height }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع سقف:</span>
+                  <span>{{ service.get_ceiling_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع مصالح دیوارچینی:</span>
+                  <span>{{ service.get_wall_material_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع نما:</span>
+                  <span>{{ service.get_facing_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">پوشش بام:</span>
+                  <span>{{ service.get_roofing_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">محل ساخت:</span>
+                  <span>{{ service.get_construction_place_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">شرایط رطوبت محیط:</span>
+                  <span>{{ service.get_humidity_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">احتمال نشت آب زیر زمینی یا سطحی:</span>
+                  <span>{% if service.leak_possibility %}دارد{% else %}ندارد{% endif %}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">شرایط خاص مانند ذوب، یخبندان یا مواد خورنده:</span>
+                  <span>{{ service.special_conditions }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">آزمایش‌هایی که در حین عملیات انجام می‌شود:</span>
+                  <span>{{ service.experiments }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">سایر آزمایش‌ها:</span>
+                  <span>{{ service.other_experiments }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">زمان تقریبی شروع تخریب یا گودبرداری از امروز:</span>
+                  <span>{{ service.excavation_time }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">زمان تقریبی پایان اسکلت از امروز:</span>
+                  <span>{{ service.skeleton_time }}</span>
+                </li>
+                <li class="list-group-item">
+        <span class="fw-bold">زمان تقریبی پایان عملیات (صدور پایان‌کار و شروع پوشش
+          بیمه):</span>
+                  <span>{{ service.finish_time }}</span>
+                </li>
+                <li class="list-group-item">
+        <span class="fw-bold">
+          ارزش اجرای سازه (گودبرداری، اجرای فونداسیون و اسکلت):
+        </span>
+                  <span>{{ service.construction_value }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">ارزش عملیات بنایی (دیوارچینی):</span>
+                  <span>{{ service.walling_value }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">ارزش عملیات تاسیساتی:</span>
+                  <span>{{ service.facilities_value }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">ارزش عملیات نازک‌کاری و نما:</span>
+                  <span>{{ service.facing_value }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">ارزش سایر عملیات:</span>
+                  <span>{{ service.other_value }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">ارزش هر متر مربع:</span>
+                  <span>{{ service.area_value }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">میزان تورم سالانه مورد درخواست طی ده سال:</span>
+                  <span>{{ service.required_annual_inflation }}</span>
+                </li>
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:insurance_quality_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" and project.building.employer == request.user %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}{% endblock inline_javascript %}

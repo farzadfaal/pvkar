@@ -1,0 +1,43 @@
+{% for service in project.materialgrainsservice_set.all %}
+  <div class="col-12 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">مقدار مورد نیاز:</span>
+            <span>{{ service.required_amount }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">نوع مصالح:</span>
+            <span>{{ service.get_material_type_display }}</span>
+          </li>
+          {% if service.material_type == "sand" %}
+            <li class="list-group-item">
+              <span class="fw-bold">نوع ماسه:</span>
+              <span>{{ service.get_sand_type_display }}</span>
+            </li>
+          {% elif service.material_type == "gravel" %}
+            <li class="list-group-item">
+              <span class="fw-bold">نوع شن:</span>
+              <span>{{ service.get_gravel_type_display }}</span>
+            </li>
+            <li class="list-group-item">
+              <span class="fw-bold">اندازه شن:</span>
+              <span>{{ service.get_gravel_size_display }}</span>
+            </li>
+          {% endif %}
+          {% if service.extra_info %}
+            <li class="list-group-item">
+              <span class="fw-bold">توضیحات اضافی:</span>
+              <p class="m-0">{{ service.extra_info }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endfor %}

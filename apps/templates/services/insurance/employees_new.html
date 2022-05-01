@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - بیمه‌ی مسئولیت کارکنان | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - بیمه‌ی مسئولیت کارکنان{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (بیمه‌ی مسئولیت کارکنان)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "insurance_employee" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      {% if not project.insuranceemployeesliabilityservice_set.all %}
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-check me-1"></i>
+            <span>ثبت آیتم</span>
+          </button>
+        </form>
+      {% else %}
+        <div class="alert alert-danger">
+          امکان اضافه کردن سرویس جدید برای درخواست ثبت شده در رسته‌ی بیمه‌ی مسئولیت کارکنان وجود
+          ندارد.
+        </div>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      امکان اضافه کردن سرویس جدید برای درخواست ثبت شده در رسته‌ی
+      {{ project.get_service_type_display }} وجود ندارد.
+      لطفا درخواست جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>جزئیات آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع کاربری ساختمان:</span>
+                  <span>{{ service.get_usecase_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">متراژ کل زیربنا:</span>
+                  <span>{{ service.infrastructure_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع اسکلت‌بندی:</span>
+                  <span>{{ service.get_skeleton_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل طبقات:</span>
+                  <span>{{ service.total_stories }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل طبقات زیرزمین:</span>
+                  <span>{{ service.get_total_basements_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">وضعیت فعلی:</span>
+                  <span>{{ service.get_current_status_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مدت زمان درخواست بیمه:</span>
+                  <span>{{ service.requested_insurance_duration }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مساحت زمین مورد ساخت:</span>
+                  <span>{{ service.construction_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">سیستم سازه:</span>
+                  <span>{{ service.get_structural_system_display }}</span>
+                </li>
+                {% comment %} General Info:: End {% endcomment %}
+                <li class="list-group-item">
+                  <span class="fw-bold">هزینه‌ی پزشکی هر نفر در هر حادثه:</span>
+                  <span>{{ service.singular_medical_expenses }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">هزینه‌ی پزشکی هر نفر در طول کل مدت بیمه:</span>
+                  <span>{{ service.total_medical_expenses }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">حداکثر نفرات:</span>
+                  <span>{{ service.maximum_employees }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد نفرات فوت و نقص عضو شده:</span>
+                  <span>{{ service.total_defected }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">حداکثر مبلغ برای ماه‌های عادی:</span>
+                  <span>{{ service.maximum_expenses_normal }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">حداکثر مبلغ برای ماه‌های حرام:</span>
+                  <span>{{ service.maximum_expenses_haram }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مسئولیت در قبال شخص ثالث:</span>
+                  <span>{% if service.liability_3rd_parties %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد نفرات برای مطالبات تامین اجتماعی:</span>
+                  <span>{{ service.tamin_ejtemaei_numbers }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مبلغ مطالبات تامین اجتماعی:</span>
+                  <span>{{ service.tamin_ejtemaei_demands }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">افزایش دیه:</span>
+                  <span>{{ service.get_increase_wergild_display }}</span>
+                </li>
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:insurance_employee_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" and project.building.employer == request.user %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}{% endblock inline_javascript %}

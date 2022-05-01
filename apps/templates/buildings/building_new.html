@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}ثبت ساختمان جدید{% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت ساختمان جدید{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'buildings:building_list' %}">لیست ساختمان‌ها</a>
+</li>
+<li class="breadcrumb-item" aria-current="page">ثبت ساختمان جدید</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button class="btn btn-primary">ثبت ساختمان</button>
+</form>
+{% endblock content %}
+
+{% block after_content %}{% endblock after_content %}
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

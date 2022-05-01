@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block title %}پی‌وی کار{% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ویرایش ساختمان {{ building.id }}{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">صفحه‌ی اصلی</li>
+<li class="breadcrumb-item" aria-current="page">
+  <a href="{% url 'buildings:building_list' %}">لیست ساختمان</a>
+</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button class="btn btn-primary">ویرایش ساختمان {{ building.id }}</button>
+</form>
+{% endblock content %}
+
+{% block after_content %}{% endblock after_content %}
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

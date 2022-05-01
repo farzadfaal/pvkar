@@ -1,0 +1,45 @@
+{% for service in project.contractingexcavationservice_set.all %}
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">حجم خاک‌برداری:</span>
+            <span>{{ service.excavation_volume }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">عمق خاک‌برداری:</span>
+            <span>{{ service.excavation_depth }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تاریخ تقریبی شروع پروژه:</span>
+            <span>{{ service.start }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تصویر محل خاک‌برداری:</span>
+            <a class="btn btn-sm btn-info" href="{{ service.area_image.url }}">
+              <i class="fas fa-download me-1"></i>
+              <span>دانلود تصویر</span>
+            </a>
+          </li>
+          {% if service.extra_info %}
+            <li class="list-group-item">
+              <span class="fw-bold">توضیحات اضافی:</span>
+              <p class="m-0">{{ service.extra_info }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="card-footer">
+        <a href="" class="btn btn-danger-light">
+          <i class="fas fa-trash me-1"></i>
+          <span>حذف آیتم</span>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endfor %}

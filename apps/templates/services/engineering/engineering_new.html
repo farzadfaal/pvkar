@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - خدمات مهندسی | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - خدمات مهندسی{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (خدمات مهندسی)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "engineering" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      {% if not project.engineeringservice_set.all %}
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-check me-1"></i>
+            <span>ثبت آیتم</span>
+          </button>
+        </form>
+      {% else %}
+        <div class="alert alert-danger">
+          امکان اضافه کردن سرویس جدید برای درخواست ثبت شده در رسته‌ی خدمات مهندسی وجود ندارد.
+        </div>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      امکان اضافه کردن سرویس جدید برای درخواست ثبت شده در رسته‌ی
+      {{ project.get_service_type_display }} وجود ندارد.
+      لطفا درخواست جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>جزئیات آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <span class="fw-bold">زمینه‌ی مهندسی:</span>
+                  <span>{{ service.get_engineering_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل طبقات:</span>
+                  <span>{{ service.total_stories }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع سازه:</span>
+                  <span>{{ service.get_building_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مساحت زمین قابل ساخت:</span>
+                  <span>{{ service.constructable_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">متراژ کل زیربنا:</span>
+                  <span>{{ service.infrastructure_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد طبقات زیرزمین:</span>
+                  <span>{{ service.get_total_basements_display }}</span>
+                </li>
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:engineering_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" and project.building.employer == request.user %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}{% endblock inline_javascript %}

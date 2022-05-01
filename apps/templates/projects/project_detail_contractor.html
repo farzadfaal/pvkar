@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}جزئیات درخواست | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}جزئیات درخواست{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item active">جزئیات درخواست</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <span>شناسه:</span>
+      <span>{{ project.id }}</span>
+    </li>
+    <li class="list-group-item">
+      <span>رسته:</span>
+      <span>{{ project.get_category_display }}</span>
+    </li>
+    <li class="list-group-item">
+      <span>دسته:</span>
+      <span>{{ project.get_service_type_display }}</span>
+    </li>
+  </ul>
+{% endblock content %}
+
+{% block after_content %}
+  <div class="row g-3">
+    <div class="col-12 d-flex align-items-center justify-content-between">
+      <h2>آیتم‌ها ثبت شده</h2>
+    </div>
+    {% comment %} Material:: Start {% endcomment %}
+    {% if project.category == "material" %}
+      {% comment %} material category:: start {% endcomment %}
+      {% if project.service_type == "material_aac" %}
+        {% include "projects/material/_aac_detail.html" %}
+      {% elif project.service_type == "material_beam" %}
+        {% include "projects/material/_beam_detail.html" %}
+      {% elif project.service_type == "material_clay" %}
+        {% include "projects/material/_clay_detail.html" %}
+      {% elif project.service_type == "material_concrete" %}
+        {% include "projects/material/_concrete_detail.html" %}
+      {% elif project.service_type == "material_concrete_block" %}
+        {% include "projects/material/_concrete_block_detail.html" %}
+      {% elif project.service_type == "material_frame" %}
+        {% include "projects/material/_frame_detail.html" %}
+      {% elif project.service_type == "material_grains" %}
+        {% include "projects/material/_grains_detail.html" %}
+      {% elif project.service_type == "material_polystyrene" %}
+        {% include "projects/material/_polystyrene_detail.html" %}
+      {% endif %}
+      {% comment %} material category:: end {% endcomment %}
+    {% endif %}
+    {% comment %} Material:: End {% endcomment %}
+
+    {% comment %} Engineering:: Start {% endcomment %}
+    {% if project.category == "engineering" %}
+      {% include "projects/engineering/_engineering_detail.html" %}
+    {% endif %}
+    {% comment %} Engineering:: End {% endcomment %}
+
+    {% comment %} Insurance:: Start {% endcomment %}
+    {% if project.category == "insurance" %}
+      {% comment %} insurance categories:: start {% endcomment %}
+      {% if project.service_type == "insurance_employee" %}
+        {% include "projects/insurance/_employee_detail.html" %}
+      {% elif project.service_type == "insurance_quality" %}
+        {% include "projects/insurance/_quality_detail.html" %}
+      {% elif project.service_type == "insurance_third_party" %}
+        {% include "projects/insurance/_third_party_detail.html" %}
+      {% endif %}
+      {% comment %} insurance categories:: end {% endcomment %}
+    {% endif %}
+    {% comment %} Insurance:: End {% endcomment %}
+
+    {% comment %} Contracting:: Start {% endcomment %}
+    {% if project.category == "contracting" %}
+      {% comment %} contracting categories:: start {% endcomment %}
+      {% if project.service_type == "contracting_concrete" %}
+        {% include "projects/contracting/_concrete_detail.html" %}
+      {% elif project.service_type == "contracting_excavation" %}
+        {% include "projects/contracting/_excavation_detail.html" %}
+      {% elif project.service_type == "contracting_facing" %}
+        {% include "projects/contracting/_facing_detail.html" %}
+      {% elif project.service_type == "contracting_gas" %}
+        {% include "projects/contracting/_gas_detail.html" %}
+      {% elif project.service_type == "contracting_nailing" %}
+        {% include "projects/contracting/_nailing_detail.html" %}
+      {% elif project.service_type == "contracting_painting" %}
+        {% include "projects/contracting/_painting_detail.html" %}
+      {% elif project.service_type == "contracting_piling" %}
+        {% include "projects/contracting/_piling_detail.html" %}
+      {% elif project.service_type == "contracting_plastering" %}
+        {% include "projects/contracting/_plastering_detail.html" %}
+      {% elif project.service_type == "contracting_plumbing" %}
+        {% include "projects/contracting/_plumbing_detail.html" %}
+      {% elif project.service_type == "contracting_scaffolding" %}
+        {% include "projects/contracting/_scaffolding_detail.html" %}
+      {% elif project.service_type == "contracting_steel" %}
+        {% include "projects/contracting/_steel_detail.html" %}
+      {% elif project.service_type == "contracting_truss" %}
+        {% include "projects/contracting/_truss_detail.html" %}
+      {% elif project.service_type == "contracting_wall" %}
+        {% include "projects/contracting/_wall_detail.html" %}
+      {% elif project.service_type == "contracting_waterproofing" %}
+        {% include "projects/contracting/_waterproofing_detail.html" %}
+      {% elif project.service_type == "contracting_wiring" %}
+        {% include "projects/contracting/_wiring_detail.html" %}
+      {% endif %}
+      {% comment %} contracting categories:: end {% endcomment %}
+    {% endif %}
+    {% comment %} Contracting:: End {% endcomment %}
+
+    <a href="{% url 'proposals:proposal_new' project.id %}" class="btn btn-primary">ثبت
+      پیشنهاد</a>
+  </div>
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}{% endblock inline_javascript %}

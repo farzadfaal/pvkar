@@ -1,0 +1,49 @@
+{% for service in project.contractingwallservice_set.all %}
+  <div class="col-12 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">مساحت دیوار:</span>
+            <span>{{ service.wall_area }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">ضخامت دیوار:</span>
+            <span>{{ service.wall_thickness }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">نوع دیوار:</span>
+            <span>{{ service.get_wall_type_display }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">نقشه‌ی معماری:</span>
+            <a href="{{ service.plan.url }}" class="btn btn-sm btn-info">
+              <i class="fas fa-download me-1"></i>
+              <span>دانلود نقشه</span>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تاریخ شروع پروژه:</span>
+            <span>{{ service.start }}</span>
+          </li>
+          {% if service.extra_info %}
+            <li class="list-group-item">
+              <span class="fw-bold">توضیحات اضافی:</span>
+              <p class="m-0">{{ service.extra_info }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="card-footer">
+        <a href="" class="btn btn-danger-light">
+          <i class="fas fa-trash me-1"></i>
+          <span>حذف آیتم</span>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endfor %}

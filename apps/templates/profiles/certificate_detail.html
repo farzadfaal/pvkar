@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}لیست درخواست‌ها | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}لیست درخواست‌ها{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'home' %}">صفحه‌ی اصلی</a>
+</li>
+<li class="breadcrumb-item">
+  <a href="{% url 'profiles:profile_detail' %}">جزئیات پروفایل</a>
+</li>
+<li class="breadcrumb-item">
+  <a href="{% url 'profiles:certificate_list' %}">لیست گواهی‌نامه‌ها</a>
+</li>
+<li class="breadcrumb-item active">جزئیات گواهی‌نام</li>
+{% endblock breadcrumbs %}
+{% block content %}
+<h2 class="card-title">جزئیات گواهی‌نامه</h2>
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <span class="fw-bold">شناسه:</span>
+    <span>{{ certificate.id }}</span>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">عنوان گواهی‌نامه:</span>
+    <span>{{ certificate.title }}</span>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">کد گواهی‌نامه:</span>
+    <span>{{ certificate.code }}</span>
+  </li>
+  <li class="list-group-item">
+    <span class="fw-bold">مرجع صادرکننده گواهی‌نامه:</span>
+    <span>{{ certificate.issued_by }}</span>
+  </li>
+  {% if certificate.image %}
+  <li class="list-group-item d-flex flex-column">
+    <span class="fw-bold">تصویر گواهی‌نامه:</span>
+    <img src="{{ certificate.image.url }}" alt="{{ certificate.title }}"
+      class="img-thumbnail w-25">
+  </li>
+  {% endif %}
+</ul>
+{% endblock content %}
+
+{% block after_content %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

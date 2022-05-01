@@ -1,0 +1,39 @@
+{% for service in project.materialbeamservice_set.all %}
+  <div class="col-12 col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">جنس:</span>
+            <span>{{ service.get_type_display }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">محل استفاده:</span>
+            <span>{{ service.get_implementation_area_display }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">طول مورد نیاز:</span>
+            <span>{{ service.required_length }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تعداد مورد نیاز:</span>
+            <span>{{ service.required_quantity }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">هزینه‌ی حمل:</span>
+            <span>{% if service.transport %}بله{% else %}خیر{% endif %}</span>
+          </li>
+          <li class="list-group-item d-flex align-items-center">
+            <span class="fw-bold me-3">نقشه مقطع تیرچه‌ها:</span>
+            <a href="{{ service.plan.url }}" class="btn btn-info-light"><i
+              class="fas fa-download me-1"></i><span>دانلود</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+{% endfor %}

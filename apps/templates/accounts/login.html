@@ -1,0 +1,37 @@
+{% extends "accounts/base.html" %}
+{% load crispy_forms_filters static %}
+
+{% block title_block %}
+ورود
+{% endblock title_block %}
+
+{% block body_block %}
+<div class="card card-body">
+  <h3 class="card-title text-center">ورود</h3>
+  <form class="form" method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {{ form|crispy }}
+
+    <div class="row g-3">
+      <div class="col-12 d-grid">
+        <button class="btn btn-primary" type="submit">ورود</button>
+      </div>
+
+      <div class="col-12">
+        <div class="alert alert-info m-0">
+          <span>حساب کاربری ندارید؟</span>
+          <a class="alert-link" href="{% url 'accounts:signup' %}">ثبت نام</a></div>
+      </div>
+      <div class="col-12">
+        <div class="alert alert-danger m-0">
+          <a class="alert-link" href="{% url 'accounts:password_reset' %}">گذرواژه‌تان
+            را فراموش
+            کرده‌اید؟</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock body_block %}

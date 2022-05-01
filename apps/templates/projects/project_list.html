@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}لیست درخواست‌ها | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}لیست درخواست‌ها{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:building_detail' building.id %}">{{ building.title }}</a>
+  </li>
+  <li class="breadcrumb-item active">لیست درخواست‌ها</li>
+{% endblock breadcrumbs %}
+{% block content %}
+  {% if building.project_set.all %}
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col">
+            <span class="fw-bold">شناسه</span>
+          </div>
+          <div class="col">
+            <span class="fw-bold">رسته</span>
+          </div>
+          <div class="col">
+            <span class="fw-bold">نوع آیتم‌های درخواستی</span>
+          </div>
+          <div class="col">
+            <span class="fw-bold">وضعیت</span>
+          </div>
+        </div>
+      </li>
+      {% for project in building.project_set.all %}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col">
+              <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">{{ project.id }}
+              </a>
+            </div>
+            <div class="col">{{ project.get_category_display }}</div>
+            <div class="col">{{ project.get_service_type_display }}</div>
+            <div class="col">{{ project.get_status_display }}</div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="text-center">
+      شما تاکنون درخواستی برای این ساختمان ثبت نکرده‌اید. برای مشاهده لیست درخواست‌ها ثبت
+      شده باید
+      <a class="btn btn-sm btn-primary" href="{% url 'buildings:building_new' %}">
+        <i class="fas fa-plus me-1"></i>
+        <span>درخواست جدید ثبت کنید.</span>
+      </a>
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  <div class="row g-3">
+    <div class="col-12">
+      <h2>ثبت درخواست جدید</h2>
+    </div>
+    <div class="col-12">
+      <form class="mb-3" method="post"
+            action="{% url 'buildings:projects:project_new' building.id %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">ثبت درخواست</button>
+      </form>
+      <div class="alert alert-info d-flex align-items-center m-0">
+        <i class="fas fa-2x fa-info-circle me-3"></i>
+        <p class="m-0">
+          لطفا برای ثبت درخواست جدید برای این ساختمان، نوع خدمات درخواستی خود را انتخاب کنید. در نظر داشته باشید
+          که پس از انتخاب نوع درخواست، امکان ویرایش آن وجود ندارد!
+        </p>
+      </div>
+    </div>
+  </div>
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+{% block inline_javascript %}{% endblock inline_javascript %}

@@ -1,0 +1,94 @@
+{% for service in project.insuranceemployeesliabilityservice_set.all %}
+  <div class="col-12">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </li>
+      {% comment %} General Info:: Start {% endcomment %}
+      <li class="list-group-item">
+        <span class="fw-bold">نوع کاربری ساختمان:</span>
+        <span>{{ service.get_usecase_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">متراژ کل زیربنا:</span>
+        <span>{{ service.infrastructure_area }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">نوع اسکلت‌بندی:</span>
+        <span>{{ service.get_skeleton_type_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">تعداد کل طبقات:</span>
+        <span>{{ service.total_stories }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">تعداد کل طبقات زیرزمین:</span>
+        <span>{{ service.get_total_basements_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">وضعیت فعلی:</span>
+        <span>{{ service.get_current_status_display }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">مدت زمان درخواست بیمه:</span>
+        <span>{{ service.requested_insurance_duration }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">مساحت زمین مورد ساخت:</span>
+        <span>{{ service.construction_area }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">سیستم سازه:</span>
+        <span>{{ service.get_structural_system_display }}</span>
+      </li>
+      {% comment %} General Info:: End {% endcomment %}
+      <li class="list-group-item">
+        <span class="fw-bold">هزینه‌ی پزشکی هر نفر در هر حادثه:</span>
+        <span>{{ service.singular_medical_expenses }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">هزینه‌ی پزشکی هر نفر در طول کل مدت بیمه:</span>
+        <span>{{ service.total_medical_expenses }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">حداکثر نفرات:</span>
+        <span>{{ service.maximum_employees }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">تعداد نفرات فوت و نقص عضو شده:</span>
+        <span>{{ service.total_defected }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">حداکثر مبلغ برای ماه‌های عادی:</span>
+        <span>{{ service.maximum_expenses_normal }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">حداکثر مبلغ برای ماه‌های حرام:</span>
+        <span>{{ service.maximum_expenses_haram }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">مسئولیت در قبال شخص ثالث:</span>
+        <span>{% if service.liability_3rd_parties %}بله{% else %}خیر{% endif %}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">تعداد نفرات برای مطالبات تامین اجتماعی:</span>
+        <span>{{ service.tamin_ejtemaei_numbers }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">مبلغ مطالبات تامین اجتماعی:</span>
+        <span>{{ service.tamin_ejtemaei_demands }}</span>
+      </li>
+      <li class="list-group-item">
+        <span class="fw-bold">افزایش دیه:</span>
+        <span>{{ service.get_increase_wergild_display }}</span>
+      </li>
+      {% if service.extra_info %}
+        <li class="list-group-item">
+          <span class="fw-bold">توضیحات اضافی:</span>
+          <p class="m-0">{{ service.extra_info }}</p>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+{% endfor %}

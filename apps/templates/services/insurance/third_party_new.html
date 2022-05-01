@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - بیمه‌ی مسئولیت کارکنان | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - بیمه‌ی مسئولیت کارکنان{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (بیمه‌ی مسئولیت کارکنان)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "insurance_third_party" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      {% if not project.insurancethirdpartyliabilityservice_set.all %}
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-check me-1"></i>
+            <span>ثبت آیتم</span>
+          </button>
+        </form>
+      {% else %}
+        <div class="alert alert-danger">
+          امکان اضافه کردن سرویس جدید برای درخواست ثبت شده در رسته‌ی
+          {{ project.get_service_type_display }} وجود ندارد.
+          لطفا درخواست جدید ثبت کنید.
+        </div>
+      {% endif %}
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      این درخواست منتشر شده است و امکان اضافه کردن آیتم‌ها جدید برای آن وجود ندارد. لطفا
+      درخواست
+      جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>جزئیات آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع کاربری ساختمان:</span>
+                  <span>{{ service.get_usecase_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">متراژ کل زیربنا:</span>
+                  <span>{{ service.infrastructure_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع اسکلت‌بندی:</span>
+                  <span>{{ service.get_skeleton_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل طبقات:</span>
+                  <span>{{ service.total_stories }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">تعداد کل طبقات زیرزمین:</span>
+                  <span>{{ service.get_total_basements_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">وضعیت فعلی:</span>
+                  <span>{{ service.get_current_status_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مدت زمان درخواست بیمه:</span>
+                  <span>{{ service.requested_insurance_duration }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مساحت زمین مورد ساخت:</span>
+                  <span>{{ service.construction_area }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">سیستم سازه:</span>
+                  <span>{{ service.get_structural_system_display }}</span>
+                </li>
+                {% comment %} General Info End {% endcomment %}
+                <li class="list-group-item">
+                  <span class="fw-bold">عرض قطعه:</span>
+                  <span>{{ service.width }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">عمق خاک‌برداری:</span>
+                  <span>{{ service.depth }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع خاک:</span>
+                  <span>{{ service.get_soil_type_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">روش خاک‌برداری:</span>
+                  <span>{{ service.get_excavation_method_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">وجود نشست آب و عمق آب در عمق خاک‌برداری:</span>
+                  <span>{% if service.has_water_level %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">عمق سطح آب:</span>
+                  <span>{{ service.water_level }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نوع تردد منطقه:</span>
+                  <span>{{ service.get_traffic_display }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">عملیات همزمان با فصل بارندگی:</span>
+                  <span>{% if service.raining_season %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">در صورت بالا بودن سطح آب عملیات زهکشی انجام می‌شود:</span>
+                  <span>{% if service.drainage %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">نقشه‌ی سازه نگهبان مورد تایید نظام مهندسی:</span>
+                  <span>{% if service.verified_plan %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                <li class="list-group-item">
+        <span class="fw-bold">حصار و توری فلزی در اطراف محل پروژه برای جلوگیری از سقوط
+          اجسام:</span>
+                  <span>{% if service.has_fence %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">مبلغ تعهدات مالی:</span>
+                  <span>{{ service.financial_commitment }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">هزینه‌ی پزشکی هر نفر در هر حادثه:</span>
+                  <span>{{ service.medical_expenses_per_person }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">هزینه‌ی پزشکی هر نفر در طول مدت بیمه:</span>
+                  <span>{{ service.medical_expenses_per_period }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">شرایط مجاورهای شمالی:</span>
+                  <span>{{ service.north_neighbours }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">شرایط مجاورهای شرقی:</span>
+                  <span>{{ service.east_neighbours }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">شرایط مجاورهای جنوبی:</span>
+                  <span>{{ service.south_neighbours }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">شرایط مجاورهای غربی:</span>
+                  <span>{{ service.west_neighbours }}</span>
+                </li>
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:insurance_third_party_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" and project.building.employer == request.user %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-warning text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}{% endblock inline_javascript %}

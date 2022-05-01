@@ -1,0 +1,297 @@
+a{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}ثبت آیتم - بلوک سیمانی یا پوکه‌ای توخالی | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}ثبت آیتم - بلوک سیمانی یا پوکه‌ای توخالی{% endblock page_title %}
+{% block breadcrumbs %}
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_list' building.id %}">لیست در‌خواست‌ها</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'buildings:projects:project_detail' building.id project.id %}">
+      درخواست {{ project.id }}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">ثبت آیتم (خرید بلوک سیمانی یا پوکه‌ای توخالی)</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+  {% if project.status == "draft" %}
+    {% if project.service_type != "material_concrete_block" %}
+      <div class="alert alert-danger">
+        نوع آیتم‌ها ثبت شده برای این درخواست {{ project.get_service_type_display }} است
+        و امکان اضافه کردن آیتم‌ها از نوع دیگر به این درخواست وجود ندارد. لطفا درخواست جدید ثبت
+        کنید.
+      </div>
+    {% else %}
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">افزودن</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <div class="alert alert-danger">
+      این درخواست منتشر شده است و امکان اضافه کردن آیتم‌ها جدید برای آن وجود ندارد. لطفا درخواست
+      جدید ثبت کنید.
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block after_content %}
+  {% if services %}
+    <div class="row g-3">
+      <div class="col-12 d-flex align-items-center justify-content-between">
+        <h2>آیتم‌ها ثبت شده</h2>
+      </div>
+      {% for service in services %}
+        <div class="col-12 col-lg-4">
+          <div class="card">
+            <div class="card-header">
+              <span class="fw-bold">شناسه:</span>
+              <span>{{ service.id }}</span>
+            </div>
+            <div class="card-body">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  <span class="fw-bold">مقدار مورد نیاز:</span>
+                  <span>{{ service.required_amount }}</span>
+                </li>
+                <li class="list-group-item">
+                  <span class="fw-bold">جنس:</span>
+                  <span>{{ service.get_type_display }}</span>
+                </li>
+                {% if service.type == "concrete" %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">ابعاد مورد نیاز:</span>
+                    <span>{{ service.get_concrete_dimensions_display }}</span>
+                  </li>
+                  {% if service.concrete_dimensions == "normal" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.get_concrete_thickness_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.get_concrete_height_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.get_concrete_length_display }}</span>
+                    </li>
+                  {% endif %}
+                  {% if service.concrete_dimensions == "custom" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.concrete_custom_thickness }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.concrete_custom_height }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.concrete_custom_length }}</span>
+                    </li>
+                  {% endif %}
+                {% endif %}
+                {% if service.type == "tuff" %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">ابعاد مورد نیاز:</span>
+                    <span>{{ service.get_tuff_dimensions_display }}</span>
+                  </li>
+                  {% if service.tuff_dimensions == "normal" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.get_tuff_thickness_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.get_tuff_height_display }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.get_tuff_length_display }}</span>
+                    </li>
+                  {% endif %}
+                  {% if service.tuff_dimensions == "custom" %}
+                    <li class="list-group-item">
+                      <span class="fw-bold">ضخامت:</span>
+                      <span>{{ service.tuff_custom_thickness }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">ارتفاع:</span>
+                      <span>{{ service.tuff_custom_height }}</span>
+                    </li>
+                    <li class="list-group-item">
+                      <span class="fw-bold">طول:</span>
+                      <span>{{ service.tuff_custom_length }}</span>
+                    </li>
+                  {% endif %}
+                {% endif %}
+                <li class="list-group-item">
+                  <span class="fw-bold">هزینه‌ی حمل:</span>
+                  <span>{% if service.transport %}بله{% else %}خیر{% endif %}</span>
+                </li>
+                {% if service.extra_info %}
+                  <li class="list-group-item">
+                    <span class="fw-bold">توضیحات اضافی:</span>
+                    <p class="m-0">{{ service.extra_info }}</p>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'services:material_concrete_block_delete' service.id %}" class="btn btn-danger-light">
+                <i class="fas fa-trash me-1"></i>
+                <span>حذف آیتم</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if project.status == "draft" %}
+        <a href="{% url 'buildings:projects:project_finalize' building.id project.id %}"
+           class="btn btn-success"><i class="fas fa-check me-1"></i><span>تایید و ثبت
+        نهایی</span></a>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center m-0">
+      در حال حاضر هیچ آیتمی برای درخواست ثبت نشده است.
+    </div>
+  {% endif %}
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}
+  <script>
+    const concretedimensions = document.getElementById("id_concrete_dimensions")
+    const concretedimensionsWrapper = document.getElementById(
+      "div_id_concrete_dimensions")
+    concretedimensionsWrapper.remove();
+    const concretethickness = document.getElementById("div_id_concrete_thickness")
+    concretethickness.remove();
+    const concreteheight = document.getElementById("div_id_concrete_height")
+    concreteheight.remove();
+    const concretelength = document.getElementById("div_id_concrete_length")
+    concretelength.remove();
+    const concretecustomthickness = document.getElementById(
+      "div_id_concrete_custom_thickness")
+    concretecustomthickness.remove();
+    const concretecustomheight = document.getElementById(
+      "div_id_concrete_custom_height")
+    concretecustomheight.remove();
+    const concretecustomlength = document.getElementById(
+      "div_id_concrete_custom_length")
+    concretecustomlength.remove();
+    const tuffdimensions = document.getElementById("id_tuff_dimensions")
+    const tuffdimensionsWrapper = document.getElementById("div_id_tuff_dimensions")
+    tuffdimensionsWrapper.remove();
+    const tuffthickness = document.getElementById("div_id_tuff_thickness")
+    tuffthickness.remove();
+    const tuffheight = document.getElementById("div_id_tuff_height")
+    tuffheight.remove();
+    const tufflength = document.getElementById("div_id_tuff_length")
+    tufflength.remove();
+    const tuffcustomthickness = document.getElementById(
+      "div_id_tuff_custom_thickness")
+    tuffcustomthickness.remove();
+    const tuffcustomheight = document.getElementById(
+      "div_id_tuff_custom_height")
+    tuffcustomheight.remove();
+    const tuffcustomlength = document.getElementById(
+      "div_id_tuff_custom_length")
+    tuffcustomlength.remove();
+
+    const type = document.getElementById("id_type")
+    const typeWrapper = document.getElementById("div_id_type")
+    type.addEventListener("change", () => {
+      if (type.value == "concrete") {
+        typeWrapper.parentNode.insertBefore(concretedimensionsWrapper, typeWrapper
+          .nextSibling);
+        tuffdimensionsWrapper.remove()
+        tuffthickness.remove();
+        tuffheight.remove();
+        tufflength.remove();
+        tuffcustomthickness.remove();
+        tuffcustomheight.remove();
+        tuffcustomlength.remove();
+      }
+      if (type.value == "tuff") {
+        typeWrapper.parentNode.insertBefore(tuffdimensionsWrapper, typeWrapper
+          .nextSibling);
+        concretedimensionsWrapper.remove()
+        concretedimensionsWrapper.remove()
+        concretethickness.remove();
+        concreteheight.remove();
+        concretelength.remove();
+        concretecustomthickness.remove();
+        concretecustomheight.remove();
+        concretecustomlength.remove();
+      }
+    })
+    concretedimensions.addEventListener("change", () => {
+      if (concretedimensions.value == "normal") {
+        concretedimensionsWrapper.parentNode.insertBefore(concretethickness,
+          concretedimensionsWrapper
+            .nextSibling);
+        concretedimensionsWrapper.parentNode.insertBefore(concreteheight,
+          concretedimensionsWrapper
+            .nextSibling);
+        concretedimensionsWrapper.parentNode.insertBefore(concretelength,
+          concretedimensionsWrapper
+            .nextSibling);
+        concretecustomthickness.remove();
+        concretecustomheight.remove();
+        concretecustomlength.remove();
+      }
+      if (concretedimensions.value == "custom") {
+        concretedimensionsWrapper.parentNode.insertBefore(concretecustomthickness,
+          concretedimensionsWrapper
+            .nextSibling);
+        concretedimensionsWrapper.parentNode.insertBefore(concretecustomheight,
+          concretedimensionsWrapper
+            .nextSibling);
+        concretedimensionsWrapper.parentNode.insertBefore(concretecustomlength,
+          concretedimensionsWrapper
+            .nextSibling);
+        concretethickness.remove();
+        concreteheight.remove();
+        concretelength.remove();
+      }
+    })
+    tuffdimensions.addEventListener("change", () => {
+      if (tuffdimensions.value == "normal") {
+        tuffdimensionsWrapper.parentNode.insertBefore(tuffthickness,
+          tuffdimensionsWrapper
+            .nextSibling);
+        tuffdimensionsWrapper.parentNode.insertBefore(tuffheight,
+          tuffdimensionsWrapper
+            .nextSibling);
+        tuffdimensionsWrapper.parentNode.insertBefore(tufflength,
+          tuffdimensionsWrapper
+            .nextSibling);
+        tuffcustomthickness.remove();
+        tuffcustomheight.remove();
+        tuffcustomlength.remove();
+      }
+      if (tuffdimensions.value == "custom") {
+        tuffdimensionsWrapper.parentNode.insertBefore(tuffcustomthickness,
+          tuffdimensionsWrapper
+            .nextSibling);
+        tuffdimensionsWrapper.parentNode.insertBefore(tuffcustomheight,
+          tuffdimensionsWrapper
+            .nextSibling);
+        tuffdimensionsWrapper.parentNode.insertBefore(tuffcustomlength,
+          tuffdimensionsWrapper
+            .nextSibling);
+        tuffthickness.remove();
+        tuffheight.remove();
+        tufflength.remove();
+      }
+    })
+
+  </script>
+{% endblock inline_javascript %}

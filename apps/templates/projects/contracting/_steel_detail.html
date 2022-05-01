@@ -1,0 +1,65 @@
+{% for service in project.contractingsteelservice_set.all %}
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <span class="fw-bold">شناسه:</span>
+        <span>{{ service.id }}</span>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <span class="fw-bold">نوع فونداسیون:</span>
+            <span>{{ service.get_foundation_type_display }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">زیربنای کل پروژه:</span>
+            <span>{{ service.infrastructure_area }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">متراژ هر سقف:</span>
+            <span>{{ service.ceiling_area }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تعداد کل سقف:</span>
+            <span>{{ service.total_ceilings }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تعداد کل زیرزمین:</span>
+            <span>{{ service.total_basements }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">متراژ کل:</span>
+            <span>{{ service.total_area }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">نقشه‌ی سازه‌ای:</span>
+            <a href="{{ service.plan.url }}" class="btn btn-sm btn-info">
+              <i class="fas fa-download me-1"></i>
+              <span>دانلود نقشه</span>
+            </a>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">مواردی که بر عهده‌ی پیمان‌کار است:</span>
+            <span>{{ service.contractor_responsibilities }}</span>
+          </li>
+          <li class="list-group-item">
+            <span class="fw-bold">تاریخ شروع پروژه:</span>
+            <span>{{ service.start }}</span>
+          </li>
+          {% if service.extra_info %}
+            <li class="list-group-item">
+              <span class="fw-bold">توضیحات اضافی:</span>
+              <p class="m-0">{{ service.extra_info }}</p>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="card-footer">
+        <a href="" class="btn btn-danger-light">
+          <i class="fas fa-trash me-1"></i>
+          <span>حذف آیتم</span>
+        </a>
+      </div>
+    </div>
+  </div>
+{% endfor %}

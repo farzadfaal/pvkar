@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% block title %}پرداخت با موفقیت انجام شد | {% endblock title %}
+{% block description %}{% endblock description %}
+{% block page_title %}پرداخت با موفقیت انجام شد{% endblock page_title %}
+{% block breadcrumbs %}
+<li class="breadcrumb-item">
+  <a href="{% url 'home' %}">صفحه‌ی اصلی</a>
+</li>
+<li class="breadcrumb-item active">پرداخت با موفقیت انجام شد</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<h2 class="card-title">پرداخت با موفقیت انجام شد</h2>
+<div class="alert alert-success m-0">
+  خرید بسته با موفقیت انجام شد.
+</div>
+{% endblock content %}
+
+{% block after_content %}
+<div class="alert alert-info m-0">
+  پس از ثبت و تایید فرم به صفحه‌ی جزئیات پلن منتقل خواهید شد.
+</div>
+{% endblock after_content %}
+
+{% block modal %}{% endblock modal %}
+
+{% block inline_javascript %}{% endblock inline_javascript %}
