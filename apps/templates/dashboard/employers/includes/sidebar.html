@@ -1,0 +1,23 @@
+{% load static %}
+<nav id="sidebar" class="sidebar-wrapper">
+  <div class="sidebar-content" data-simplebar style="height: calc(100% - 60px);">
+    <div class="sidebar-brand">
+      <a href="{% url 'home' %}" class="text-center">
+        <img src="{% static 'images/logo-dark.png' %}" height="24" class="logo-light-mode" alt="">
+        <img src="{% static 'images/logo-light.png' %}" height="24" class="logo-dark-mode" alt="">
+        <span class="sidebar-colored">
+            <img src="{% static 'images/logo-light.png' %}" height="24" alt="">
+          </span>
+      </a>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="{% url 'buildings:building_list' %}"><i class="fas fa-dashboard me-2"></i>داشبورد</a></li>
+      <li><a href="{% url 'buildings:building_list' %}"><i class="fas fa-dashboard me-2"></i>ساختمان‌های من</a></li>
+      <li><a href="{% url 'projects:project_list_employer' %}"><i class="fas fa-dashboard me-2"></i>درخواست‌های من</a>
+      </li>
+
+    </ul>
+    <!-- sidebar-menu  -->
+  </div>
+</nav>

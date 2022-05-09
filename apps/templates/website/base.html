@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="utf-8"/>
+  <title>{% block title %}{% endblock %} - پی وی کار</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="بولتن مشاغل ساختمانی"/>
+  <meta name="keywords" content="Saas, Software, multi-uses, HTML, Clean, Modern"/>
+  <meta name="author" content="Farzad Faal"/>
+  <meta name="email" content="farzadfaal@outlook.com"/>
+  <meta name="website" content="https://pvkar.ir"/>
+  <meta name="Version" content="v1.0.0"/>
+  <!-- favicon -->
+  <link rel="shortcut icon" href="{% static 'website/img/favicon.ico' %}">
+  <!-- Bootstrap -->
+  <link href="{% static 'website/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+  <!-- tobii css -->
+  <link href="{% static 'website/css/tobii.min.css' %}" rel="stylesheet" type="text/css"/>
+  <!-- Icons -->
+  <link href="{% static 'website/css/materialdesignicons.min.css' %}" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
+  <!-- Slider -->
+  <link rel="stylesheet" href="{% static 'website/css/tiny-slider.css' %}"/>
+  <!-- Main Css -->
+  <link href="{% static 'website/css/style-rtl.min.css' %}" rel="stylesheet" type="text/css" id="theme-opt"/>
+  <link href="{% static 'website/css/colors/yellow.css' %}" rel="stylesheet" id="color-opt">
+
+</head>
+
+<body>
+<header id="topnav" class="defaultscroll sticky">
+  <div class="container">
+    <a class="logo" href="{% url 'home' %}">
+      <span class="logo-light-mode">
+        <img src="{% static 'website/img/logo.svg' %}" class="l-dark" height="40" alt="">
+        <img src="{% static 'website/img/logo.svg' %}" class="l-light" height="40" alt="">
+      </span>
+      <img src="{% static 'website/img/logo.svg' %}" height="40" class="logo-dark-mode" alt="">
+    </a>
+
+    <div class="menu-extras">
+      <div class="menu-item">
+        <!-- Mobile menu toggle-->
+        <a class="navbar-toggle" id="isToggle" onclick="toggleMenu()">
+          <div class="lines">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </a>
+        <!-- End mobile menu toggle-->
+      </div>
+    </div>
+
+    <!--Login button Start-->
+    <ul class="buy-button list-inline mb-0">
+      <li class="list-inline-item mb-0">
+        <a href="javascript:void(0)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+           aria-controls="offcanvasRight">
+          <div class="btn btn-icon btn-pills btn-soft-primary">
+            <i data-feather="plus" class="fea icon-sm"></i>
+          </div>
+        </a>
+      </li>
+
+      <li class="list-inline-item ps-1 mb-0">
+        <a href="javascript:void(0)" target="_blank">
+          <div class="btn btn-icon btn-pills btn-primary">
+            <i data-feather="user" class="fea icon-sm"></i>
+          </div>
+        </a>
+      </li>
+    </ul>
+    <!--Login button End-->
+
+    <div id="navigation">
+      <!-- Navigation Menu-->
+      <ul class="navigation-menu nav-dark">
+        <li><a href="{% url 'home' %}" class="sub-menu-item">صفحه اصلی</a></li>
+        <li><a href="{% url 'about' %}" class="sub-menu-item">درباره ما</a></li>
+        <li><a href="{% url 'terms' %}" class="sub-menu-item">شرایط استفاده</a></li>
+      </ul><!--end navigation menu-->
+    </div><!--end navigation-->
+  </div><!--end container-->
+</header>
+
+
+<div class="py-5 mt-100">
+  <h1 class="text-center">{% block page_title %}عنوان صفحه{% endblock page_title %}</h1>
+</div>
+
+
+<div class="container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+</div>
+
+
+<!-- Footer Start -->
+{% include 'website/includes/footer.html' %}
+<!-- Footer End -->
+
+<!-- Offcanvas Start -->
+<div class="offcanvas offcanvas-end bg-white shadow" tabindex="-1" id="offcanvasRight"
+     aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header p-4 border-bottom">
+    <h5 id="offcanvasRightLabel" class="mb-0">
+      <img src="images/logo-dark.png" height="24" class="light-version" alt="">
+      <img src="images/logo-light.png" height="24" class="dark-version" alt="">
+    </h5>
+    <button type="button" class="btn-close d-flex align-items-center text-dark" data-bs-dismiss="offcanvas"
+            aria-label="Close"><i class="uil uil-times fs-4"></i></button>
+  </div>
+  <div class="offcanvas-body p-4">
+    <div class="row">
+      <div class="col-12">
+        <img src="images/contact.svg" class="img-fluid d-block mx-auto" style="max-width: 256px;" alt="">
+        <div class="card border-0 mt-5" style="z-index: 1">
+          <div class="card-body p-0">
+            <form method="post" name="myForm" onsubmit="return validateForm()">
+              <p id="error-msg" class="mb-0"></p>
+              <div id="simple-msg"></div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Your Name <span class="text-danger">*</span></label>
+                    <div class="form-icon position-relative">
+                      <i data-feather="user" class="fea icon-sm icons"></i>
+                      <input name="name" id="name" type="text" class="form-control ps-5" placeholder="Name :">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Your Email <span class="text-danger">*</span></label>
+                    <div class="form-icon position-relative">
+                      <i data-feather="mail" class="fea icon-sm icons"></i>
+                      <input name="email" id="email" type="email" class="form-control ps-5" placeholder="Email :">
+                    </div>
+                  </div>
+                </div><!--end col-->
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label class="form-label">Subject</label>
+                    <div class="form-icon position-relative">
+                      <i data-feather="book" class="fea icon-sm icons"></i>
+                      <input name="subject" id="subject" class="form-control ps-5" placeholder="subject :">
+                    </div>
+                  </div>
+                </div><!--end col-->
+
+                <div class="col-12">
+                  <div class="mb-3">
+                    <label class="form-label">Comments <span class="text-danger">*</span></label>
+                    <div class="form-icon position-relative">
+                      <i data-feather="message-circle" class="fea icon-sm icons clearfix"></i>
+                      <textarea name="comments" id="comments" rows="4" class="form-control ps-5"
+                                placeholder="Message :"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="d-grid">
+                    <button type="submit" id="submit" name="send" class="btn btn-primary">Send Message</button>
+                  </div>
+                </div><!--end col-->
+              </div><!--end row-->
+            </form>
+          </div>
+        </div>
+      </div><!--end col-->
+    </div><!--end row-->
+  </div>
+
+  <div class="offcanvas-footer p-4 border-top text-center">
+    <ul class="list-unstyled social-icon social mb-0">
+      <li class="list-inline-item mb-0"><a href="https://1.envato.market/landrick" target="_blank" class="rounded"><i
+        class="uil uil-shopping-cart align-middle" title="Buy Now"></i></a></li>
+      <li class="list-inline-item mb-0"><a href="https://dribbble.com/shreethemes" target="_blank" class="rounded"><i
+        class="uil uil-dribbble align-middle" title="dribbble"></i></a></li>
+      <li class="list-inline-item mb-0"><a href="https://www.facebook.com/shreethemes" target="_blank"
+                                           class="rounded"><i class="uil uil-facebook-f align-middle"
+                                                              title="facebook"></i></a></li>
+      <li class="list-inline-item mb-0"><a href="https://www.instagram.com/shreethemes/" target="_blank"
+                                           class="rounded"><i class="uil uil-instagram align-middle"
+                                                              title="instagram"></i></a></li>
+      <li class="list-inline-item mb-0"><a href="https://twitter.com/shreethemes" target="_blank" class="rounded"><i
+        class="uil uil-twitter align-middle" title="twitter"></i></a></li>
+      <li class="list-inline-item mb-0"><a href="mailto:support@shreethemes.in" class="rounded"><i
+        class="uil uil-envelope align-middle" title="email"></i></a></li>
+      <li class="list-inline-item mb-0"><a href="https://shreethemes.in" target="_blank" class="rounded"><i
+        class="uil uil-globe align-middle" title="website"></i></a></li>
+    </ul><!--end icon-->
+  </div>
+</div>
+<!-- Offcanvas End -->
+
+<!-- Back to top -->
+<a href="#" onclick="topFunction()" id="back-to-top" class="back-to-top fs-5"><i data-feather="arrow-up"
+                                                                                 class="fea icon-sm icons align-middle"></i></a>
+
+<!-- javascript -->
+<script src="{% static 'website/js/bootstrap.bundle.min.js' %}"></script>
+<!-- Shuffle and tobii js -->
+<script src="{% static 'website/js/shuffle.min.js' %}"></script>
+<script src="{% static 'website/js/tobii.min.js' %}"></script>
+<!-- SLIDER -->
+<script src="{% static 'website/js/tiny-slider.js' %}"></script>
+<!-- Icons -->
+<script src="{% static 'website/js/feather.min.js' %}"></script>
+<!-- Main Js -->
+<script src="{% static 'website/js/plugins.init.js' %}"></script>
+<!--Note: All init (custom) js like tiny slider, counter, countdown, lightbox, gallery, swiper slider etc.-->
+<script src="{% static 'website/js/app.js' %}"></script>
+<!--Note: All important javascript like page loader, menu, sticky menu, menu-toggler, one page menu etc. -->
+</body>
+</html>

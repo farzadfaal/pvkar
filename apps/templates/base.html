@@ -1,4 +1,4 @@
-{% load static i18n compress%}
+{% load static i18n compress %}
 <!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}" dir="rtl">
@@ -14,73 +14,74 @@
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
   {% block css %}
-  {% compress css %}
-  <link href="{% static 'css/project.css' %}" rel="stylesheet">
-  {% endcompress %}
+    {% compress css %}
+      <link href="{% static 'css/project.css' %}" rel="stylesheet">
+      <link rel="stylesheet" href="{% static 'website/css/colors/yellow.css' %}">
+    {% endcompress %}
   {% endblock %}
 </head>
 
 <body>
-  {% include "includes/header.html" %}
+{% include "includes/header.html" %}
 
-  {% if messages %}
+{% if messages %}
   <div class="position-absolute"
-    style="max-width:360px; font-size:0.875rem; left: 0.25rem; z-index: 9999;">
+       style="max-width:360px; font-size:0.875rem; left: 0.25rem; z-index: 9999;">
     {% for message in messages %}
-    <div
-      class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %} fade show">
-      <button type="button" class="btn-close" data-bs-dismiss="alert"
-        aria-label="Close"></button>
-      {{ message }}
-    </div>
+      <div
+        class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %} fade show">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                aria-label="Close"></button>
+        {{ message }}
+      </div>
     {% endfor %}
   </div>
-  {% endif %}
+{% endif %}
 
-  <div class="container">
-    <div class="row g-3">
-      <div class="col-12">
-        <h1 class="py-3 d-flex align-items-center mb-0">
-          {% block page_title %}This is page title{% endblock page_title %}
-        </h1>
-      </div>
-      <div class="col-12 col-lg-3">
-        <aside class="card card-body h-100">
-          {% include "includes/sidebar.html" %}
-          <aside class="bg-white rounded">
-      </div>
-      <div class="col-12 col-lg-9">
-        <main class="card card-body h-100">
-          <ol class="breadcrumb d-flex align-items-center">
-            {% block breadcrumbs %}
+<div class="container">
+  <div class="row g-3">
+    <div class="col-12">
+      <h1 class="py-3 d-flex align-items-center mb-0">
+        {% block page_title %}This is page title{% endblock page_title %}
+      </h1>
+    </div>
+    <div class="col-12 col-lg-3">
+      <aside class="card card-body h-100">
+        {% include "includes/sidebar.html" %}
+        <aside class="bg-white rounded">
+    </div>
+    <div class="col-12 col-lg-9">
+      <main class="card card-body h-100">
+        <ol class="breadcrumb d-flex align-items-center">
+          {% block breadcrumbs %}
             <li class="breadcrumb-item" aria-current="page">صفحه‌ی اصلی</li>
-            {% endblock breadcrumbs %}
-          </ol>
-          {% block content %}{% endblock content %}
-        </main>
-      </div>
-      <div class="col-12">
-        <section class="card card-body">
-          {% block after_content %}
-          {% endblock after_content %}
-        </section>
-      </div>
+          {% endblock breadcrumbs %}
+        </ol>
+        {% block content %}{% endblock content %}
+      </main>
+    </div>
+    <div class="col-12">
+      <section class="card card-body">
+        {% block after_content %}
+        {% endblock after_content %}
+      </section>
     </div>
   </div>
+</div>
 
-  {% include "includes/footer.html" %}
-  {% block modal %}{% endblock modal %}
+{% include "includes/footer.html" %}
+{% block modal %}{% endblock modal %}
 
-  {% block javascript %}
+{% block javascript %}
   {% compress js %}
-  <script src="{% static 'js/vendors.min.js' %}"></script>
+    <script src="{% static 'js/vendors.min.js' %}"></script>
   {% endcompress %}
 
   {% compress js %}
-  <script src="{% static 'js/project.min.js' %}"></script>
+    <script src="{% static 'js/project.min.js' %}"></script>
   {% endcompress %}
-  {% endblock javascript %}
-  {% block inline_javascript %}{% endblock inline_javascript %}
+{% endblock javascript %}
+{% block inline_javascript %}{% endblock inline_javascript %}
 </body>
 
 </html>

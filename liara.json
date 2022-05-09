@@ -1,7 +1,8 @@
 {
-    "platform": "django",
-    "app": "pvkar",
-    "django": {
-        "settingsFile": "config/settings/production.py"
-    }
+  "platform": "django",
+  "app": "pvkar",
+  "port": "80",
+  "django": {
+    "settingsFile": "config/settings/production.py"
   }
+}

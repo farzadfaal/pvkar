@@ -1,0 +1,60 @@
+{% load static %}
+<nav id="sidebar" class="sidebar-wrapper">
+  <div class="sidebar-content" data-simplebar style="height: calc(100% - 60px);">
+    <div class="sidebar-brand">
+      <a href="{% url 'home' %}" class="text-center">
+        <img src="{% static 'images/logo-dark.png' %}" height="24" class="logo-light-mode" alt="">
+        <img src="{% static 'images/logo-light.png' %}" height="24" class="logo-dark-mode" alt="">
+        <span class="sidebar-colored">
+            <img src="{% static 'images/logo-light.png' %}" height="24" alt="">
+          </span>
+      </a>
+    </div>
+
+    <ul class="sidebar-menu">
+      <li><a href="{% url 'home' %}"><i class="fas fa-dashboard me-2"></i>داشبورد</a></li>
+      <li class="sidebar-dropdown">
+        <a href="javascript:void(0)"><i class="fas fa-user me-2"></i>پروفایل</a>
+        <div class="sidebar-submenu">
+          <ul>
+            <li><a href="{% url 'dashboard:clients:profile_avatar_update' %}">بروزرسانی تصویر پروفایل</a></li>
+            <li><a href="{% url 'dashboard:clients:profile_general_detail' %}">اطلاعات پروفایل عمومی</a></li>
+            <li><a href="">اطلاعات پروفایل مالی</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="sidebar-dropdown">
+        <a href="javascript:void(0)"><i class="fas fa-receipt me-2"></i>سفارشات</a>
+        <div class="sidebar-submenu">
+          <ul>
+            <li><a href="{% url 'dashboard:clients:translations' %}">سفارشات ترجمه</a></li>
+            <li><a href="">سفارشات ترجمه رسمی</a></li>
+            <li><a href="">ترجمه همزمان</a></li>
+            <li><a href="">سفارشات ویراستاری</a></li>
+            <li><a href="">سفارشات پارافریز</a></li>
+            <li><a href="">سفارشات فرمت‌بندی</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="sidebar-dropdown">
+        <a href="javascript:void(0)"><i class="fas fa-file-invoice-dollar"></i>فاکتورها</a>
+        <div class="sidebar-submenu">
+          <ul>
+            <li><a href="{% url 'dashboard:clients:text_translation_invoice_list' %}">فاکتورهای ترجمه متنی</a></li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+    <!-- sidebar-menu  -->
+  </div>
+  <!-- Sidebar Footer -->
+  <ul class="sidebar-footer list-unstyled mb-0">
+    <li class="d-flex justify-content-center">
+      <a class="btn btn-soft-primary" href="{% url 'dashboard:clients:orders' %}">
+        <i class="fas fa-shopping-cart"></i>
+        <span>سفارش جدید</span>
+      </a>
+    </li>
+  </ul>
+  <!-- Sidebar Footer -->
+</nav>

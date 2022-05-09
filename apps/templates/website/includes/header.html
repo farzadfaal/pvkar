@@ -47,11 +47,9 @@
     <div id="navigation">
       <!-- Navigation Menu-->
       <ul class="navigation-menu nav-light">
-        <li><a href="" class="sub-menu-item">صفحه اصلی</a></li>
-        <li><a href="" class="sub-menu-item">درباره ما</a></li>
-        <li><a href="" class="sub-menu-item">تماس با ما</a></li>
-        <li><a href="" class="sub-menu-item">تعرفه خدمات</a></li>
-        <li><a href="" class="sub-menu-item">لیست پروژه‌ها</a></li>
+        <li><a href="{% url 'home' %}" class="sub-menu-item">صفحه اصلی</a></li>
+        <li><a href="{% url 'about' %}" class="sub-menu-item">درباره ما</a></li>
+        <li><a href="{% url 'terms' %}" class="sub-menu-item">شرایط استفاده</a></li>
       </ul><!--end navigation menu-->
     </div><!--end navigation-->
   </div><!--end container-->
