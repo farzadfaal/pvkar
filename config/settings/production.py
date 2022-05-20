@@ -1,8 +1,8 @@
 import sys
 
 sys.path.append('/usr/src/app/config/settings')
-from .base import *  # noqa
-from .base import env
+from base import *  # noqa
+from base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
