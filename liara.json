@@ -3,6 +3,7 @@
   "app": "pvkar",
   "port": "80",
   "django": {
-    "settingsFile": "config/settings/production.py"
+    "settingsFile": "config/settings/production.py",
+    "modifySettings": false
   }
 }
